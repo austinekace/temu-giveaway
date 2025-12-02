@@ -1,128 +1,108 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const path = require('path');
-// Import the PostgreSQL client
-const { Pool } = require('pg'); 
+const cors = require('cors'); // Step 1: Import CORS middleware
+const { Pool } = require('pg');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 10000;
 
-// --- DATABASE SETUP ---
+// Middleware
+app.use(cors()); // Step 2: Enable CORS for all origins (fixes NetworkError)
+app.use(bodyParser.json());
 
-// Use the DATABASE_URL environment variable provided by Render or set manually
-const connectionString = process.env.DATABASE_URL;
-
-if (!connectionString) {
-    console.error("WARNING: DATABASE_URL environment variable is not set. Database integration will be disabled.");
-}
-
-// Create a PostgreSQL connection pool (only if connection string exists)
-const pool = connectionString ? new Pool({
-    connectionString: connectionString,
-    // Required for Render to connect securely
+// Database connection setup (using a single connection string)
+// Note: Render sets the DATABASE_URL environment variable automatically.
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
     ssl: {
-        rejectUnauthorized: false
+        rejectUnauthorized: false // Required for some environments like Render
     }
-}) : null;
+});
 
 /**
- * Initializes the database by ensuring the 'claims' table exists.
+ * Initializes the database by creating the 'claims' table if it doesn't exist.
  */
 async function initializeDatabase() {
-    if (!pool) return;
-    
-    console.log('Attempting to initialize database...');
     try {
         const client = await pool.connect();
-        // Create the 'claims' table if it doesn't exist
         const createTableQuery = `
             CREATE TABLE IF NOT EXISTS claims (
                 id SERIAL PRIMARY KEY,
                 claim_id VARCHAR(50) UNIQUE NOT NULL,
-                user_name VARCHAR(100) NOT NULL,
-                user_email VARCHAR(100) NOT NULL,
-                shipping_fee NUMERIC(10, 2) NOT NULL,
-                items_json TEXT NOT NULL,
-                full_data JSONB NOT NULL,
-                submission_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+                timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+                user_name VARCHAR(255) NOT NULL,
+                user_email VARCHAR(255) NOT NULL,
+                user_phone VARCHAR(50) NOT NULL,
+                user_address TEXT NOT NULL,
+                items_claimed JSONB NOT NULL,
+                item_count INTEGER NOT NULL,
+                shipping_fee_ngn DECIMAL(10, 2) NOT NULL
             );
         `;
         await client.query(createTableQuery);
         client.release();
         console.log('Database initialized: "claims" table is ready.');
     } catch (err) {
-        console.error('Error initializing database. Check DATABASE_URL and connectivity:', err.message);
+        console.error('Error initializing database:', err);
     }
 }
 
-// --- MIDDLEWARE ---
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname)));
+// Generate a simple unique ID (e.g., CLAIM-123456)
+function generateClaimId() {
+    return 'CLAIM-' + Math.floor(100000 + Math.random() * 900000);
+}
 
-
-// --- ROUTE HANDLER ---
-app.post('/submit-claim', async (req, res) => {
-    const claimData = req.body;
-    const mockClaimId = `CLAIM-${Date.now()}`;
-    
-    // Check if database is configured before attempting to save
-    if (!pool) {
-        console.warn(`Claim ID ${mockClaimId} received, but not saved: Database is not connected.`);
-        // Proceed with success response even if DB is down/missing, 
-        // to avoid breaking the frontend flow.
-        return res.status(200).json({ 
-            message: 'Claim received and payment confirmed (Server logging only).',
-            claimId: mockClaimId,
-            status: 'SUCCESS_NO_DB'
-        });
-    }
-
-
-    // Prepare data fields for database insertion
-    const { name, email, address } = claimData.user_info;
-    const { shipping_fee_ngn, items_claimed } = claimData;
-
+// POST endpoint to handle the claim submission
+app.post('/claim', async (req, res) => {
     try {
-        const insertQuery = `
-            INSERT INTO claims (
-                claim_id, user_name, user_email, shipping_fee, items_json, full_data
-            ) VALUES ($1, $2, $3, $4, $5, $6)
-            RETURNING id;
-        `;
+        const { user_info, items_claimed, item_count, shipping_fee_ngn } = req.body;
+        const { name, email, phone, address } = user_info;
+        const claim_id = generateClaimId();
 
+        const insertQuery = `
+            INSERT INTO claims (claim_id, user_name, user_email, user_phone, user_address, items_claimed, item_count, shipping_fee_ngn)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+            RETURNING claim_id;
+        `;
         const values = [
-            mockClaimId,
-            name,
-            email,
-            shipping_fee_ngn,
-            JSON.stringify(items_claimed),
-            claimData 
+            claim_id, 
+            name, 
+            email, 
+            phone, 
+            address, 
+            JSON.stringify(items_claimed), // Store as JSON string in JSONB column
+            item_count, 
+            shipping_fee_ngn
         ];
 
-        // Execute the insert query
         const result = await pool.query(insertQuery, values);
-        console.log(`Successfully saved claim ID ${mockClaimId} to database. DB ID: ${result.rows[0].id}`);
 
-        // Send a success response back to the client
-        res.status(200).json({ 
-            message: 'Claim received and payment confirmed (Data saved).',
-            claimId: mockClaimId,
-            status: 'SUCCESS'
+        console.log(`Claim ${claim_id} submitted by ${name}. Fee: ${shipping_fee_ngn}`);
+
+        res.status(201).json({ 
+            message: 'Claim successfully recorded.',
+            claimId: result.rows[0].claim_id,
+            fee: shipping_fee_ngn 
         });
 
     } catch (error) {
-        console.error('Database insertion error:', error.message);
+        console.error('Error processing claim:', error.message);
+        // Ensure to send a JSON response on error
         res.status(500).json({ 
-            message: 'An internal error occurred while saving your claim.',
-            error: error.message
+            error: 'Failed to process claim submission.', 
+            details: error.message 
         });
     }
 });
 
-// --- SERVER START ---
-app.listen(PORT, async () => {
-    console.log(`Server is running successfully on port ${PORT}.`);
-    if (pool) {
-        await initializeDatabase();
-    }
+// GET endpoint for health check or testing
+app.get('/', (req, res) => {
+    res.send('TEMU Giveaway Claim Service is running.');
+});
+
+// Start server and initialize DB
+initializeDatabase().then(() => {
+    app.listen(port, () => {
+        console.log(`Server is running successfully on port ${port}.`);
+    });
 });
