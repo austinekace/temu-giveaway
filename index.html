@@ -1,517 +1,383 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEMU Grand Giveaway - Select Items</title>
-    <!-- Load Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Use Inter font -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Temu - Amazing deals on everything</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f5f5f5; /* Light gray background */
+        /* Color Variables based on Screenshot Analysis */
+        :root {
+            --dark: #222;
+            --black: #000;
+            --body-bg: #f5f5f5; /* Light gray body background for product grid area */
+            --orange: #ff6a00; /* Primary accent for Temu Logo and Highlights */
+            --red-accent: #ff4500; /* Secondary accent color (similar to red/orange sale text) */
+            --green-bar: #009900; /* The prominent green bar color */
+            --purple-bar: #800080; /* The prominent purple bar color */
+            --product-bg: #fff;
         }
-        /* Custom scrollbar for the items container */
-        .custom-scroll::-webkit-scrollbar {
-            width: 8px;
+        * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,Helvetica,sans-serif; }
+        body { background:var(--body-bg); color:#111; line-height:1.5; }
+        a { text-decoration:none; color:inherit; }
+
+        /* General Layout */
+        .container { max-width:1400px; margin:0 auto; padding:0 15px; }
+
+        /* TOP LAYERS - Header Complex Structure */
+
+        /* 1. Top Search/Icons Bar */
+        .header-top {
+            background:var(--black);
+            color:#fff;
+            padding:10px 15px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            position:sticky;
+            top:0;
+            z-index:1000;
         }
-        .custom-scroll::-webkit-scrollbar-track {
-            background: #ffe0b2; /* Light orange track */
-            border-radius: 10px;
+        .logo-section { display:flex; align-items:center; }
+        .logo { font-size:32px; font-weight:bold; color:var(--orange); display:flex; align-items:center; gap:5px;}
+        
+        .searchbar-main {
+            flex:1;
+            max-width:500px;
+            background:#333;
+            border-radius:20px;
+            padding:8px 15px;
+            display:flex;
+            align-items:center;
+            gap:10px;
+            margin:0 20px;
         }
-        .custom-scroll::-webkit-scrollbar-thumb {
-            background: #ff8a65; /* Temu orange thumb */
-            border-radius: 10px;
+        .searchbar-main input {
+            background:transparent;
+            border:none;
+            outline:none;
+            color:#fff;
+            width:100%;
+            font-size:14px;
         }
-        .custom-scroll::-webkit-scrollbar-thumb:hover {
-            background: #ff5722;
+        .header-icons a { margin-left:15px; font-size:18px; color:#fff; }
+
+        /* 2. Trust/Delivery Bar */
+        .header-delivery {
+            background:var(--dark);
+            color:#fff;
+            padding:8px 15px;
+            font-size:13px;
+            display:flex;
+            justify-content:center;
+            gap:25px;
+            flex-wrap:wrap;
+            border-bottom:1px solid #444;
         }
-        /* Style for selected items (border glow - TEMU Orange) */
-        .item-card.selected {
-            border-color: #ff5722;
-            box-shadow: 0 0 0 3px #ffab91; /* Light orange ring effect */
+        .header-delivery span { display:flex; align-items:center; gap:5px; }
+
+        /* 3. Sale Bar (Green) */
+        .sale-bar-green {
+            background:var(--green-bar);
+            color:#fff;
+            padding:10px 15px;
+            font-size:14px;
+            text-align:center;
+            font-weight:bold;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            gap: 20px;
         }
-        .item-card {
-            transition: all 0.2s ease-in-out;
-            border-radius: 0.5rem; /* Consistent rounding */
+        .sale-bar-green select {
+            background:var(--green-bar);
+            border:1px solid #fff;
+            color:#fff;
+            padding:4px 8px;
+            border-radius:5px;
+        }
+        
+        /* 4. Hero/Sale Banner (Purple) */
+        .hero-banner {
+            background:var(--purple-bar);
+            text-align:center;
+            padding:25px 20px;
+            font-size:24px;
+            font-weight:bold;
+            color:gold;
+        }
+        .hero-banner span { display:block; font-size:16px; margin-top:5px; color:#fff; }
+
+        /* 5. Trust Badges (White BG) */
+        .trust-badges {
+            background:#fff;
+            padding:12px 20px;
+            display:flex;
+            justify-content:center;
+            gap:30px;
+            flex-wrap:wrap;
+            font-size:14px;
+            color:#333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .trust-badges i { color:var(--green-bar); margin-right:5px; }
+
+
+        /* Product Grid (Main Content) */
+        .grid-section { background:var(--body-bg); padding:20px 0; }
+        .grid {
+            display:grid;
+            grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
+            gap:10px;
+            padding:0 15px;
+        }
+        .product {
+            background:var(--product-bg);
+            border-radius:6px;
+            overflow:hidden;
+            transition:box-shadow .2s;
+            cursor:pointer;
+        }
+        .product:hover { box-shadow:0 5px 15px rgba(0,0,0,0.1); }
+        .product img {
+            width:100%;
+            height:160px;
+            object-fit:cover;
+            border-bottom:1px solid #eee;
+        }
+        .info {
+            padding:8px;
+            font-size:13px;
+        }
+        .price {
+            color:var(--red-accent);
+            font-weight:bold;
+            font-size:15px;
+        }
+        .old-price {
+            text-decoration:line-through;
+            color:#999;
+            font-size:11px;
+            margin-left:5px;
+        }
+        .sold {
+            font-size:11px;
+            color:var(--green-bar);
+            margin-top:2px;
+            font-weight:bold;
+        }
+        .badge {
+            background:var(--orange);
+            color:#fff;
+            padding:2px 5px;
+            border-radius:3px;
+            font-size:10px;
+            font-weight:bold;
+            display:inline-block;
+            margin-bottom:4px;
+        }
+
+        /* Footer */
+        footer {
+            background:var(--black);
+            color:#fff;
+            padding:40px 20px 20px;
+            margin-top:50px;
+            font-size:14px;
+        }
+        .footer-grid {
+            display:grid;
+            grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+            gap:30px;
+            max-width:1200px;
+            margin:0 auto 40px;
+        }
+        .footer-grid h4 { margin-bottom:15px; color:#fff; font-weight:bold; }
+        .footer-grid a { display:block; color:#aaa; margin:8px 0; font-size:13px; }
+        .payments img { height:25px; margin:5px; filter:grayscale(100%) brightness(2); }
+        .copyright { text-align:center; font-size:11px; color:#666; margin-top:20px; }
+
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .header-top { flex-wrap: wrap; }
+            .searchbar-main {
+                order: 3;
+                width: 100%;
+                margin: 10px 0 0 0;
+            }
+            .header-icons { margin-top: 5px; }
+            .header-delivery, .trust-badges { justify-content: space-around; gap: 10px; }
+            .hero-banner { font-size: 20px; padding: 20px; }
+            .sale-bar-green { flex-direction: column; gap: 8px; }
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4 md:p-8">
+<body>
 
-    <!-- Main Application Container -->
-    <div id="app-container" class="w-full max-w-7xl bg-white p-4 sm:p-8 rounded-xl shadow-2xl border-t-8 border-orange-600">
-        
-        <header class="text-center mb-8 pb-4 bg-white sticky top-0 z-10">
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-orange-600 mb-1">
-                <span class="text-gray-900">TEMU</span> Prize Claim Form
-            </h1>
-            <p class="text-lg text-gray-700">Select your favorite **2 valuable items** from the list below!</p>
-            <p class="text-sm text-red-600 font-semibold mt-2">NOTE: Max items: 2. Logistics Fee is calculated per item based on size/weight.</p>
-        </header>
-
-        <!-- Dynamic Content Area -->
-        <div id="dynamic-content">
-
-            <!-- Claim Form Section -->
-            <form id="claim-form" class="space-y-8">
-
-                <!-- Step 1: Item Selection -->
-                <section>
-                    <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-orange-100 pb-2">
-                        1. Choose Your Prize Items (Max 2)
-                    </h2>
-                    
-                    <!-- Items Grid Container -->
-                    <div id="items-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 max-h-[80vh] overflow-y-auto p-2 bg-gray-50 rounded-lg border custom-scroll">
-                        <!-- Items will be injected here by JavaScript -->
-                    </div>
-
-                    <!-- Summary Bar -->
-                    <div class="mt-6 p-4 bg-orange-50 border-l-4 border-orange-500 rounded-lg flex flex-col sm:flex-row justify-between items-center text-orange-800 font-bold shadow-md">
-                        <span id="item-count" class="text-base">Selected: 0 / 2</span>
-                        <span id="shipping-fee" class="text-lg mt-2 sm:mt-0">Total Logistics Fee (NGN): 0.00</span>
-                    </div>
-                </section>
-
-                <!-- Step 2: User Information -->
-                <section>
-                    <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-orange-100 pb-2">
-                        2. Contact & Delivery Details
-                    </h2>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <input type="text" id="name" placeholder="Full Name" required 
-                               class="p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 w-full transition duration-150 shadow-sm">
-                        <input type="email" id="email" placeholder="Email Address" required 
-                               class="p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 w-full transition duration-150 shadow-sm">
-                        <input type="tel" id="phone" placeholder="Phone Number" required 
-                               class="p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 w-full transition duration-150 shadow-sm">
-                    </div>
-
-                    <textarea id="address" placeholder="Full Shipping Address (Street, City, State, ZIP/Postal Code)" rows="3" required 
-                              class="mt-4 p-3 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 w-full transition duration-150 shadow-sm"></textarea>
-                </section>
-
-                <!-- Step 3: Payment/Submission -->
-                <section>
-                    <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-orange-100 pb-2">
-                        3. Final Confirmation & Logistics Fee
-                    </h2>
-
-                    <div class="p-4 bg-yellow-50 border-l-4 border-yellow-500 text-yellow-800 rounded-lg shadow-md mb-4">
-                        <p class="font-bold">Important Notice (Fee upon delivery):</p>
-                        <p class="text-sm">By proceeding, you agree to pay the calculated logistics fee of **₦<span id="final-shipping-fee" class="text-red-700 text-lg font-extrabold">0.00</span>** upon delivery. This fee is dynamically calculated based on the items you selected.</p>
-                    </div>
-
-                    <!-- Changed to a strong, high-contrast green for conversion success -->
-                    <button type="submit" id="submit-button" 
-                            class="w-full py-4 px-4 bg-green-600 text-white font-extrabold text-xl rounded-lg hover:bg-green-700 transition duration-300 transform hover:scale-[1.005] shadow-lg flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
-                        <span id="button-text">CONFIRM CLAIM & SHIPMENT AGREEMENT</span>
-                        <svg id="loading-spinner" class="animate-spin -ml-1 mr-3 h-6 w-6 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                    </button>
-                </section>
-            </form>
-
-        </div>
-
-        <!-- Message Modal (Hidden by default) -->
-        <div id="message-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-80 flex items-center justify-center p-4 z-50 transition-opacity duration-300">
-            <div class="bg-white p-8 rounded-xl shadow-3xl max-w-md w-full text-center space-y-5 transform scale-100 transition-transform duration-300">
-                <svg id="modal-icon" class="w-16 h-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Icon placeholder -->
-                </svg>
-                <h3 id="modal-title" class="text-3xl font-extrabold text-gray-900">Message Title</h3>
-                <p id="modal-body" class="text-lg text-gray-600 leading-relaxed">Message body content.</p>
-                <button onclick="window.location.reload();" class="w-full py-3 px-4 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-700 transition duration-150 shadow-md">
-                    Continue (Refresh Page)
-                </button>
+    <!-- LAYERED HEADER -->
+    <header>
+        <!-- 1. Top Search/Icons Bar (Sticky) -->
+        <div class="header-top">
+            <div class="container flex justify-between items-center">
+                <div class="logo-section">
+                    <!-- SVG for Temu Logo Text -->
+                    <svg viewBox="0 0 100 30" width="80" height="24" class="logo">
+                        <text x="0" y="24" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="900" fill="var(--orange)">temu</text>
+                    </svg>
+                </div>
+                <div class="searchbar-main hidden md:flex">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search Temu..."/>
+                </div>
+                <div class="header-icons">
+                    <a href="#" title="User"><i class="fas fa-user"></i></a>
+                    <a href="#" title="Cart"><i class="fas fa-shopping-cart"></i></a>
+                    <a href="#" title="Language"><i class="fas fa-globe"></i> EN</a>
+                </div>
             </div>
         </div>
 
-    </div>
+        <!-- 2. Delivery & Returns Bar (Dark) -->
+        <div class="header-delivery">
+            <span class="text-sm"><i class="fas fa-truck"></i> Free Shipping on all orders &gt;</span>
+            <span class="text-sm"><i class="fas fa-undo"></i> Return for any issues</span>
+            <span class="text-sm"><i class="fas fa-mobile-alt"></i> Get the Temu App</span>
+        </div>
+        
+        <!-- 3. Sale Bar (Green) -->
+        <div class="sale-bar-green">
+            <span>50% OFF FOR YOU</span>
+            <select>
+                <option>Shop All Categories</option>
+                <option>Electronics</option>
+                <option>Fashion</option>
+                <option>Home Goods</option>
+            </select>
+            <span>Today's Deal: 90% OFF</span>
+        </div>
+
+        <!-- 4. Hero/Sale Banner (Purple) -->
+        <div class="hero-banner">
+            CYBER WEEK SALE
+            <span>EXPLORE YOUR INTERESTS</span>
+        </div>
+
+        <!-- 5. Trust Badges (White BG) -->
+        <div class="trust-badges">
+            <span><i class="fas fa-shield-alt"></i> Secure privacy</span>
+            <span><i class="fas fa-lock"></i> Safe payments</span>
+            <span><i class="fas fa-box-open"></i> Delivery guarantee</span>
+            <span><i class="fas fa-medal"></i> Temu purchase protection</span>
+        </div>
+
+    </header>
+
+    <!-- PRODUCT GALLERY SECTION -->
+    <section class="grid-section">
+        <div class="container">
+            <div class="grid" id="product-grid">
+                <!-- Dynamic Products (P1 to P100) will be injected here by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <h4>About Temu</h4>
+                <a href="#">Affiliate & Influencer Program</a>
+                <a href="#">Careers</a>
+                <a href="#">Press</a>
+            </div>
+            <div>
+                <h4>Customer service</h4>
+                <a href="#">Return and refund</a>
+                <a href="#">Policy</a>
+                <a href="#">Shipping info</a>
+            </div>
+            <div>
+                <h4>Help</h4>
+                <a href="#">Support center & FAQ</a>
+                <a href="#">Safety center</a>
+                <a href="#">Temu purchase protection</a>
+            </div>
+            <div>
+                <h4>Download the Temu App</h4>
+                <img src="https://via.placeholder.com/150x40/333/fff?text=App+Store" style="height:40px;margin:10px 0" alt="App Store"/>
+                <img src="https://via.placeholder.com/150x40/333/fff?text=Google+Play" style="height:40px;margin:10px 0" alt="Google Play"/>
+            </div>
+        </div>
+
+        <div class="payments">
+            <img src="https://via.placeholder.com/60x25/333/fff?text=VISA" alt="Visa"/>
+            <img src="https://via.placeholder.com/60x25/333/fff?text=MasterCard" alt="MasterCard"/>
+            <img src="https://via.placeholder.com/60x25/333/fff?text=PayPal" alt="PayPal"/>
+            <img src="https://via.placeholder.com/60x25/333/fff?text=GPay" alt="Google Pay"/>
+            <img src="https://via.placeholder.com/60x25/333/fff?text=Amex" alt="Amex"/>
+        </div>
+
+        <div class="copyright">
+            © 2022 - 2025 Whaleco Inc. | Terms of use | Privacy policy | Your privacy choices
+        </div>
+    </footer>
 
     <script>
-        const MAX_ITEMS = 2; 
-        const API_ENDPOINT = 'https://api.temu-backend.com/submit-claim'; // Simulated API endpoint for your PostgreSQL service
+        document.addEventListener('DOMContentLoaded', () => {
+            const gridContainer = document.getElementById('product-grid');
+            const totalProducts = 100;
 
-        const ELEMENTS = {
-            itemsContainer: document.getElementById('items-container'),
-            itemCount: document.getElementById('item-count'),
-            shippingFeeDisplay: document.getElementById('shipping-fee'),
-            finalShippingFeeDisplay: document.getElementById('final-shipping-fee'),
-            claimForm: document.getElementById('claim-form'),
-            submitButton: document.getElementById('submit-button'),
-            loadingSpinner: document.getElementById('loading-spinner'),
-            buttonText: document.getElementById('button-text'),
-            messageModal: document.getElementById('message-modal'),
-            modalIcon: document.getElementById('modal-icon'),
-            modalTitle: document.getElementById('modal-title'),
-            modalBody: document.getElementById('modal-body'),
-        };
-
-        // NEW: Item database with capped values (<= ₦800,000) and variable logistics fees
-        const itemDatabase = [
-            // ELECTRONICS & TECH 
-            { id: 1, name: "Apple iPhone 15 Pro Max", category: "Electronics", value: "₦780,000", logistics_fee_ngn: 15000 },
-            { id: 2, name: "Samsung Galaxy S24 Ultra", category: "Electronics", value: "₦760,000", logistics_fee_ngn: 15000 },
-            { id: 3, name: "Sony PS5 Console (Disc)", category: "Electronics", value: "₦650,000", logistics_fee_ngn: 20000 },
-            { id: 4, name: "Microsoft Xbox Series X", category: "Electronics", value: "₦620,000", logistics_fee_ngn: 20000 },
-            { id: 5, name: "MacBook Pro M3 Max", category: "Electronics", value: "₦799,000", logistics_fee_ngn: 15000 },
-            { id: 6, name: "Dell XPS 15 Laptop", category: "Electronics", value: "₦680,000", logistics_fee_ngn: 15000 },
-            { id: 7, name: "DJI Mavic 3 Pro Drone", category: "Electronics", value: "₦550,000", logistics_fee_ngn: 10000 },
-            { id: 8, name: "Oculus Meta Quest 3 VR", category: "Electronics", value: "₦450,000", logistics_fee_ngn: 10000 },
-            { id: 9, name: "Samsung 65\" OLED TV", category: "Electronics", value: "₦750,000", logistics_fee_ngn: 25000 },
-            { id: 10, name: "Bose QuietComfort Ultra", category: "Electronics", value: "₦250,000", logistics_fee_ngn: 5000 },
-            { id: 11, name: "Apple Watch Ultra 2", category: "Electronics", value: "₦350,000", logistics_fee_ngn: 5000 },
-            { id: 12, name: "Canon EOS R5 Camera", category: "Electronics", value: "₦720,000", logistics_fee_ngn: 15000 },
-            { id: 13, name: "Google Pixel 8 Pro", category: "Electronics", value: "₦540,000", logistics_fee_ngn: 15000 },
-            { id: 14, name: "iPad Pro 12.9 (M2)", category: "Electronics", value: "₦530,000", logistics_fee_ngn: 10000 },
-            { id: 15, name: "Logitech G Pro Racing Wheel", category: "Electronics", value: "₦490,000", logistics_fee_ngn: 20000 },
-            { id: 16, name: "Samsung Galaxy Tab S9 Ultra", category: "Electronics", value: "₦480,000", logistics_fee_ngn: 10000 },
-            { id: 17, name: "GoPro HERO12 Black", category: "Electronics", value: "₦280,000", logistics_fee_ngn: 5000 },
-            { id: 18, name: "High-End Gaming PC (RTX 4090)", category: "Electronics", value: "₦799,000", logistics_fee_ngn: 25000 },
-            { id: 19, name: "Sonos Arc Soundbar", category: "Electronics", value: "₦400,000", logistics_fee_ngn: 20000 },
-            { id: 20, name: "AirPods Pro (2nd Gen)", category: "Electronics", value: "₦180,000", logistics_fee_ngn: 5000 },
-            { id: 21, name: "Tesla Powerwall 2 (Battery)", category: "Electronics", value: "₦799,000", logistics_fee_ngn: 25000 },
-            { id: 22, name: "Smart Home Security System", category: "Electronics", value: "₦350,000", logistics_fee_ngn: 10000 },
-            { id: 23, name: "Kindle Oasis (Latest Gen)", category: "Electronics", value: "₦150,000", logistics_fee_ngn: 5000 },
-            { id: 24, name: "HP Spectre x360", category: "Electronics", value: "₦590,000", logistics_fee_ngn: 15000 },
-            { id: 25, name: "FPV Racing Drone Kit", category: "Electronics", value: "₦450,000", logistics_fee_ngn: 10000 },
-            
-            // FASHION & LUXURY 
-            { id: 26, name: "Rolex Submariner Watch", category: "Luxury", value: "₦790,000", logistics_fee_ngn: 15000 },
-            { id: 27, name: "Gucci Dionysus Bag", category: "Luxury", value: "₦650,000", logistics_fee_ngn: 10000 },
-            { id: 28, name: "Louis Vuitton Keepall Bandoulière", category: "Luxury", value: "₦690,000", logistics_fee_ngn: 15000 },
-            { id: 29, name: "Valentino Garavani Sneakers", category: "Fashion", value: "₦380,000", logistics_fee_ngn: 10000 },
-            { id: 30, name: "Balenciaga Puffer Jacket", category: "Fashion", value: "₦550,000", logistics_fee_ngn: 15000 },
-            { id: 31, name: "Burberry Trench Coat", category: "Fashion", value: "₦600,000", logistics_fee_ngn: 15000 },
-            { id: 32, name: "Cartier Love Bracelet", category: "Luxury", value: "₦770,000", logistics_fee_ngn: 5000 },
-            { id: 33, name: "Chanel Classic Flap Bag", category: "Luxury", value: "₦795,000", logistics_fee_ngn: 15000 },
-            { id: 34, name: "Dior B23 High-Top Sneaker", category: "Fashion", value: "₦420,000", logistics_fee_ngn: 10000 },
-            { id: 35, name: "Fendi Zucca Scarf", category: "Fashion", value: "₦220,000", logistics_fee_ngn: 5000 },
-            { id: 36, name: "Prada Nylon Backpack", category: "Fashion", value: "₦580,000", logistics_fee_ngn: 10000 },
-            { id: 37, name: "Omega Seamaster Watch", category: "Luxury", value: "₦740,000", logistics_fee_ngn: 15000 },
-            { id: 38, name: "Hermès Birkin Bag (Mini)", category: "Luxury", value: "₦799,000", logistics_fee_ngn: 15000 },
-            { id: 39, name: "Tiffany & Co. Diamond Necklace", category: "Luxury", value: "₦780,000", logistics_fee_ngn: 5000 },
-            { id: 40, name: "Saint Laurent Leather Jacket", category: "Fashion", value: "₦700,000", logistics_fee_ngn: 15000 },
-            { id: 41, name: "Nike Air Jordan 1 OG (Rare)", category: "Fashion", value: "₦450,000", logistics_fee_ngn: 10000 },
-            { id: 42, name: "Versace Baroque Robe", category: "Fashion", value: "₦350,000", logistics_fee_ngn: 10000 },
-            { id: 43, name: "Montblanc Meisterstück Pen", category: "Luxury", value: "₦190,000", logistics_fee_ngn: 5000 },
-            { id: 44, name: "Bvlgari Serpenti Sunglasses", category: "Fashion", value: "₦260,000", logistics_fee_ngn: 5000 },
-            { id: 45, name: "Tom Ford Suit (Bespoke)", category: "Luxury", value: "₦750,000", logistics_fee_ngn: 25000 },
-            { id: 46, name: "Christian Louboutin Heels", category: "Fashion", value: "₦390,000", logistics_fee_ngn: 10000 },
-            { id: 47, name: "Givenchy Antigona Bag", category: "Fashion", value: "₦620,000", logistics_fee_ngn: 10000 },
-            { id: 48, name: "Patek Philippe Cufflinks", category: "Luxury", value: "₦480,000", logistics_fee_ngn: 5000 },
-            { id: 49, name: "Canada Goose Expedition Parka", category: "Fashion", value: "₦500,000", logistics_fee_ngn: 15000 },
-            { id: 50, name: "Fendi Baguette Bag", category: "Luxury", value: "₦710,000", logistics_fee_ngn: 10000 },
-
-            // HOME, KITCHEN & LIFESTYLE 
-            { id: 51, name: "Viking Professional 7 Series Range", category: "Home", value: "₦799,000", logistics_fee_ngn: 25000 },
-            { id: 52, name: "Smeg Retro Refrigerator", category: "Home", value: "₦650,000", logistics_fee_ngn: 25000 },
-            { id: 53, name: "Peloton Bike+ Full Package", category: "Lifestyle", value: "₦750,000", logistics_fee_ngn: 20000 },
-            { id: 54, name: "Dyson V15 Detect Vacuum", category: "Home", value: "₦350,000", logistics_fee_ngn: 10000 },
-            { id: 55, name: "Tempur-Pedic King Mattress", category: "Home", value: "₦700,000", logistics_fee_ngn: 25000 },
-            { id: 56, name: "Riedel Decanter Set (Crystal)", category: "Lifestyle", value: "₦150,000", logistics_fee_ngn: 5000 },
-            { id: 57, name: "Thermomix TM6 Smart Cooker", category: "Kitchen", value: "₦550,000", logistics_fee_ngn: 15000 },
-            { id: 58, name: "High-End Espresso Machine (La Marzocco)", category: "Kitchen", value: "₦780,000", logistics_fee_ngn: 20000 },
-            { id: 59, name: "Sonos Home Theater System", category: "Home", value: "₦650,000", logistics_fee_ngn: 20000 },
-            { id: 60, name: "Luxury Scent Diffuser (Jo Malone)", category: "Lifestyle", value: "₦80,000", logistics_fee_ngn: 5000 },
-            { id: 61, name: "Outdoor Pizza Oven (Ooni Pro)", category: "Kitchen", value: "₦450,000", logistics_fee_ngn: 15000 },
-            { id: 62, name: "Samsung Smart Fridge Hub", category: "Home", value: "₦799,000", logistics_fee_ngn: 25000 },
-            { id: 63, name: "Eames Lounge Chair and Ottoman", category: "Luxury", value: "₦799,000", logistics_fee_ngn: 25000 },
-            { id: 64, name: "iRobot Roomba j9+ Robot Vacuum", category: "Home", value: "₦420,000", logistics_fee_ngn: 10000 },
-            { id: 65, name: "Top-Tier Air Purifier (Blueair)", category: "Home", value: "₦250,000", logistics_fee_ngn: 10000 },
-            { id: 66, name: "Vitamix Ascent Series Blender", category: "Kitchen", value: "₦190,002", logistics_fee_ngn: 10000 },
-            { id: 67, name: "Artisanal Knife Set (Shun)", category: "Kitchen", value: "₦480,000", logistics_fee_ngn: 10000 },
-            { id: 68, name: "Golf Simulator Setup (Trackman)", category: "Lifestyle", value: "₦799,000", logistics_fee_ngn: 25000 },
-            { id: 69, name: "Billiard Table (Regulation Size)", category: "Lifestyle", value: "₦750,000", logistics_fee_ngn: 25000 },
-            { id: 70, name: "Professional Stand Mixer (KitchenAid)", category: "Kitchen", value: "₦180,000", logistics_fee_ngn: 10000 },
-            { id: 71, name: "Patio Furniture Set (Rattan, 8pc)", category: "Home", value: "₦620,000", logistics_fee_ngn: 25000 },
-            { id: 72, name: "Smart Garden Hydroponics System", category: "Home", value: "₦150,000", logistics_fee_ngn: 10000 },
-            { id: 73, name: "Top-of-the-Line Gaming Chair (Secretlab)", category: "Lifestyle", value: "₦350,000", logistics_fee_ngn: 15000 },
-            { id: 74, name: "Electric Fireplace Insert", category: "Home", value: "₦550,000", logistics_fee_ngn: 20000 },
-            { id: 75, name: "Designer Artwork Print (Signed)", category: "Luxury", value: "₦480,000", logistics_fee_ngn: 10000 },
-
-            // TRANSPORTATION & COMMERCIAL GEAR 
-            { id: 76, name: "Electric Scooter (Segway GT2)", category: "Transport", value: "₦580,000", logistics_fee_ngn: 20000 },
-            { id: 77, name: "High-End Road Bike (Pinarello)", category: "Transport", value: "₦750,000", logistics_fee_ngn: 25000 },
-            { id: 78, name: "Commercial 3D Printer (UltiMaker)", category: "Commercial", value: "₦790,000", logistics_fee_ngn: 25000 },
-            { id: 79, name: "Solar Panel System (5kW Residential)", category: "Commercial", value: "₦799,000", logistics_fee_ngn: 25000 },
-            { id: 80, name: "Go-Kart Racing Package (High Performance)", category: "Transport", value: "₦650,000", logistics_fee_ngn: 25000 },
-            { id: 81, name: "Professional DSLR Gimbal Stabilizer", category: "Commercial", value: "₦320,000", logistics_fee_ngn: 10000 },
-            { id: 82, name: "Commercial-Grade Pressure Washer", category: "Commercial", value: "₦280,000", logistics_fee_ngn: 15000 },
-            { id: 83, name: "Electric Cargo Bike", category: "Transport", value: "₦600,000", logistics_fee_ngn: 20000 },
-            { id: 84, name: "High-End Car Diagnostics Tool", category: "Commercial", value: "₦450,000", logistics_fee_ngn: 10000 },
-            { id: 85, name: "Folding Kayak (Advanced Model)", category: "Transport", value: "₦400,000", logistics_fee_ngn: 20000 },
-            { id: 86, name: "Electric Motorcycle (Zero S)", category: "Transport", value: "₦799,000", logistics_fee_ngn: 25000 },
-            { id: 87, name: "Tractor Drone for Agriculture", category: "Commercial", value: "₦750,000", logistics_fee_ngn: 25000 },
-            { id: 88, name: "Heavy-Duty Workshop Compressor", category: "Commercial", value: "₦500,000", logistics_fee_ngn: 20000 },
-            { id: 89, name: "Electric Skateboard (Boosted Board)", category: "Transport", value: "₦380,000", logistics_fee_ngn: 10000 },
-            { id: 90, name: "Professional Woodworking Router Table", category: "Commercial", value: "₦620,000", logistics_fee_ngn: 20000 },
-            { id: 91, name: "Portable Generator (Honda EU7000is)", category: "Commercial", value: "₦700,000", logistics_fee_ngn: 25000 },
-            { id: 92, name: "Carbon Fiber Mountain Bike (Full Suspension)", category: "Transport", value: "₦780,000", logistics_fee_ngn: 25000 },
-            { id: 93, name: "Large Format Laser Engraver", category: "Commercial", value: "₦720,000", logistics_fee_ngn: 25000 },
-            { id: 94, name: "Professional Sewing/Embroidery Machine", category: "Commercial", value: "₦650,000", logistics_fee_ngn: 15000 },
-            { id: 95, name: "Water Sports Paddleboard Set", category: "Transport", value: "₦250,000", logistics_fee_ngn: 15000 },
-            { id: 96, name: "High-Powered Binoculars (Zeiss)", category: "Lifestyle", value: "₦390,000", logistics_fee_ngn: 10000 },
-            { id: 97, name: "Heavy-Duty Workshop Tool Chest (Snap-on)", category: "Commercial", value: "₦750,000", logistics_fee_ngn: 25000 },
-            { id: 98, name: "Acoustic Guitar (Martin D-45)", category: "Luxury", value: "₦680,000", logistics_fee_ngn: 15000 },
-            { id: 99, name: "Portable Satellite Internet Terminal", category: "Commercial", value: "₦700,000", logistics_fee_ngn: 20000 },
-            { id: 100, name: "Electric Snow Blower", category: "Home", value: "₦450,000", logistics_fee_ngn: 20000 }
-        ];
-
-        let selectedItems = [];
-
-        // --- Utility Functions ---
-
-        /**
-         * Formats a number as Nigerian Naira (NGN).
-         * @param {number} amount - The amount to format.
-         */
-        const formatNaira = (amount) => {
-            // Check if Intl.NumberFormat is available
-            if (typeof Intl !== 'undefined' && Intl.NumberFormat) {
-                return new Intl.NumberFormat('en-NG', {
-                    style: 'currency',
-                    currency: 'NGN',
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                }).format(amount);
-            } else {
-                // Fallback for environments without full Intl support
-                return `₦${amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
-            }
-        };
-
-
-        /**
-         * Calculates the total logistics fee based on selected items.
-         */
-        const calculateTotalFee = () => {
-            return selectedItems.reduce((total, item) => total + item.logistics_fee_ngn, 0);
-        };
-
-        /**
-         * Updates the display for item count and shipping fee.
-         */
-        const updateSummary = () => {
-            const count = selectedItems.length;
-            const fee = calculateTotalFee(); 
-
-            ELEMENTS.itemCount.textContent = `Selected: ${count} / ${MAX_ITEMS}`;
-            ELEMENTS.shippingFeeDisplay.textContent = `Total Logistics Fee (NGN): ${formatNaira(fee)}`;
-            // Remove '₦' for display in the final notice box
-            ELEMENTS.finalShippingFeeDisplay.textContent = formatNaira(fee).replace('₦', '').trim();
-
-            ELEMENTS.submitButton.disabled = count === 0;
-            ELEMENTS.submitButton.classList.toggle('opacity-50', count === 0);
-        };
-
-        /**
-         * Handles the click event for selecting or deselecting an item.
-         */
-        const toggleItemSelection = (item, card) => {
-            const index = selectedItems.findIndex(i => i.id === item.id);
-
-            if (index > -1) {
-                // Deselect
-                selectedItems.splice(index, 1);
-                card.classList.remove('selected');
-            } else if (selectedItems.length < MAX_ITEMS) {
-                // Select
-                selectedItems.push(item);
-                card.classList.add('selected');
-            } else {
-                // Maximum reached
-                showModal('Selection Limit Reached', `You can only select a maximum of ${MAX_ITEMS} items. Please deselect an item first.`, 'error');
-            }
-            updateSummary();
-        };
-
-        /**
-         * Renders all 100 items into the grid.
-         */
-        const renderItems = () => {
-            ELEMENTS.itemsContainer.innerHTML = '';
-            itemDatabase.forEach(item => {
-                const card = document.createElement('div');
-                card.id = `item-${item.id}`;
-                // Item card style mimicking commercial e-commerce sites
-                card.className = 'item-card flex flex-col border border-gray-200 rounded-lg overflow-hidden cursor-pointer bg-white shadow-sm hover:shadow-lg transition duration-200';
-                
-                // Using placeholder image based on ID
-                const fallbackImage = `https://placehold.co/200x200/ff5722/ffffff?text=Item%20${item.id}`;
-
-                card.innerHTML = `
-                    <div class="aspect-square w-full bg-gray-100 overflow-hidden">
-                        <img 
-                            src="${fallbackImage}" 
-                            onerror="this.onerror=null;this.src='${fallbackImage}';" 
-                            alt="${item.name}" 
-                            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        >
-                    </div>
-                    <div class="p-3 flex flex-col justify-between flex-grow">
-                        <p class="font-medium text-sm text-gray-900 line-clamp-2">${item.name}</p>
-                        <div>
-                            <p class="text-xs text-gray-500 mt-1">${item.category} | Value: ${item.value}</p>
-                            <p class="text-sm text-red-600 font-bold mt-1">Fee: ${formatNaira(item.logistics_fee_ngn)}</p>
-                        </div>
-                    </div>
-                    <div class="px-3 pb-3">
-                        <button type="button" class="select-btn w-full py-1 text-xs font-semibold rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition duration-150">
-                            Select Item
-                        </button>
-                    </div>
-                `;
-                
-                const selectButton = card.querySelector('.select-btn');
-
-                selectButton.addEventListener('click', (e) => {
-                    e.stopPropagation(); 
-                    toggleItemSelection(item, card);
-                    // Update button text and style instantly
-                    const isSelected = card.classList.contains('selected');
-                    selectButton.textContent = isSelected ? 'Selected (Click to Remove)' : 'Select Item';
-                    selectButton.classList.toggle('bg-orange-500', isSelected);
-                    selectButton.classList.toggle('text-white', isSelected);
-                    selectButton.classList.toggle('border-orange-600', isSelected);
-                    selectButton.classList.toggle('border-gray-300', !isSelected);
-                    selectButton.classList.toggle('text-gray-700', !isSelected);
-                });
-
-                ELEMENTS.itemsContainer.appendChild(card);
-            });
-        };
-
-        /**
-         * Displays the success/error modal.
-         */
-        const showModal = (title, body, type) => {
-            ELEMENTS.modalTitle.textContent = title;
-            ELEMENTS.modalBody.textContent = body;
-            
-            let iconPath, colorClass;
-            const modalButton = ELEMENTS.messageModal.querySelector('button');
-
-            if (type === 'success') {
-                iconPath = '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />';
-                colorClass = 'text-green-600';
-                modalButton.classList.add('bg-orange-600', 'hover:bg-orange-700');
-                modalButton.classList.remove('bg-red-600', 'hover:bg-red-700');
-            } else {
-                iconPath = '<path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />';
-                colorClass = 'text-red-600';
-                modalButton.classList.add('bg-red-600', 'hover:bg-red-700');
-                modalButton.classList.remove('bg-orange-600', 'hover:bg-orange-700');
-            }
-            
-            ELEMENTS.modalIcon.innerHTML = iconPath;
-            ELEMENTS.modalIcon.className = `w-16 h-16 mx-auto ${colorClass}`;
-            ELEMENTS.messageModal.classList.remove('hidden');
-        };
-
-        // --- Submission Handler (SIMULATING API CALL TO POSTGRESQL SERVICE) ---
-
-        ELEMENTS.claimForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            // Check item selection
-            if (selectedItems.length === 0) {
-                 showModal('No Items Selected', 'Please select at least one item (maximum 2) to submit your claim.', 'error');
-                 return;
-            }
-
-            // Set loading state
-            ELEMENTS.submitButton.disabled = true;
-            ELEMENTS.buttonText.textContent = 'Processing Claim...';
-            ELEMENTS.loadingSpinner.classList.remove('hidden');
-
-            // Collect all form data
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const address = document.getElementById('address').value;
-            const phone = document.getElementById('phone').value;
-            const numberOfItems = selectedItems.length;
-            const shippingFee = calculateTotalFee(); 
-
-            // Payload structure matching what a PostgreSQL service would expect
-            const payload = {
-                timestamp: new Date().toISOString(),
-                user_info: { name, email, phone, address },
-                items_claimed: selectedItems.map(item => ({
-                    id: item.id,
-                    name: item.name,
-                    category: item.category,
-                    value: item.value, 
-                    logistics_fee_ngn: item.logistics_fee_ngn 
-                })),
-                item_count: numberOfItems,
-                shipping_fee_ngn: shippingFee,
+            // Utility function to format prices
+            const formatPrice = (amount) => {
+                // Formatting to a common currency style with commas for readability
+                return `₦${Math.round(amount).toLocaleString('en-US')}`;
             };
 
-            try {
-                // Simulates API call to the backend service with exponential backoff
-                let response;
-                let result;
-                let delay = 1000;
-                const maxRetries = 3;
-                let simulatedClaimId = Date.now().toString(36).toUpperCase(); // Generate a unique mock ID
+            for (let i = 1; i <= totalProducts; i++) {
+                // Dynamic Data Generation
+                const basePrice = Math.floor(Math.random() * 500 + 50) * 1000;
+                const discountPercentage = Math.floor(Math.random() * 80 + 10);
+                const currentPrice = basePrice * (1 - discountPercentage / 100);
+                const productsSold = Math.floor(Math.random() * 30 + 5) * 1000;
 
-                for (let i = 0; i < maxRetries; i++) {
-                    // *** THIS IS THE SIMULATED API CALL TO YOUR BACKEND SERVICE ***
-                    // In a real application, this URL points to your service that writes to PostgreSQL.
-                    response = await fetch(API_ENDPOINT, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(payload),
-                    });
+                const productDiv = document.createElement('div');
+                productDiv.className = 'product';
 
-                    if (response.ok) {
-                        // For simulation, we return a mock success response immediately
-                        result = { status: 'SUCCESS', claimId: simulatedClaimId };
-                        break; 
-                    } else if (i < maxRetries - 1) {
-                        // Retry on failure (exponential backoff)
-                        console.warn(`API call failed (Attempt ${i + 1}). Retrying in ${delay / 1000}s...`);
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                        delay *= 2; 
-                    } else {
-                        // Max retries reached
-                        throw new Error('Server unreachable after multiple retries.');
-                    }
-                }
+                // Generate the placeholder image URL with the sequential name (P1, P2, etc.)
+                const placeholderName = `P${i}`;
+                // Use a dark background and orange text for the placeholders to stand out
+                const imageUrl = `https://via.placeholder.com/300x300/333/ff9900?text=${placeholderName}`;
                 
-                // Show success message with the mock Claim ID
-                const title = 'Claim Submission Successful!';
-                const message = `Your claim has been submitted to the service for processing and PostgreSQL storage. Total fee: ${formatNaira(shippingFee)}. Mock Claim ID: ${result.claimId}.`;
+                let title;
+                if (i % 5 === 0) {
+                    title = `Smart Gadget ${i} (New Arrival)`;
+                } else if (i % 3 === 0) {
+                    title = `Luxury Accessory ${i}`;
+                } else {
+                    title = `Everyday Essential ${i}`;
+                }
 
-                showModal(title, message, 'success');
+                productDiv.innerHTML = `
+                    <img src="${imageUrl}" alt="${title}"/>
+                    <div class="info">
+                        <div class="badge">-${discountPercentage}%</div>
+                        <div class="title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color:#333;">${title}</div>
+                        <div class="flex items-center mt-1">
+                            <span class="price">${formatPrice(currentPrice)}</span>
+                            <span class="old-price">${formatPrice(basePrice)}</span>
+                        </div>
+                        <div class="sold">${productsSold.toLocaleString()} sold</div>
+                    </div>
+                `;
 
-            } catch (error) {
-                console.error('Submission Error:', error);
-                showModal('Claim Failed', `The backend service failed to receive the data: ${error.message || 'Check network connection.'}`, 'error');
-            } finally {
-                // Reset loading state
-                ELEMENTS.submitButton.disabled = false;
-                ELEMENTS.buttonText.textContent = 'CONFIRM CLAIM & SHIPMENT AGREEMENT';
-                ELEMENTS.loadingSpinner.classList.add('hidden');
+                gridContainer.appendChild(productDiv);
             }
-        });
-
-        // --- Initialization ---
-        document.addEventListener('DOMContentLoaded', () => {
-            renderItems();
-            updateSummary();
+            
+            console.log(`Successfully generated ${totalProducts} dynamic product cards.`);
         });
     </script>
+
 </body>
 </html>
