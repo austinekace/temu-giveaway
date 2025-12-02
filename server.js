@@ -37,6 +37,7 @@ const setupDatabase = async () => {
         const client = await pool.connect();
         
         // 1. DROP the table if it exists to fix the "column does not exist" error
+        // NOTE: We keep this DROP/CREATE cycle until we confirm the schema is stable.
         await client.query(`DROP TABLE IF EXISTS claims;`);
         console.log("PostgreSQL: Existing 'claims' table dropped successfully (to fix schema mismatch).");
 
@@ -65,7 +66,34 @@ const setupDatabase = async () => {
 setupDatabase();
 
 
-// --- POST /claim Route Handler ---
+// --- TEMPORARY GET ROUTE FOR DATA VERIFICATION (View all claims) ---
+// We will use this route to confirm that data is readable from the database.
+app.get('/view-claims', async (req, res) => {
+    if (!DATABASE_URL) {
+        return res.status(500).json({ success: false, message: 'Database connection failed: DATABASE_URL is not set.' });
+    }
+    
+    try {
+        const client = await pool.connect();
+        const result = await client.query('SELECT * FROM claims ORDER BY claim_date DESC;');
+        client.release();
+
+        // Display the retrieved data as raw JSON on the page
+        res.json(result.rows);
+
+    } catch (err) {
+        console.error("Database Retrieval Error:", err.stack);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Failed to retrieve claims from database.',
+            error: err.message
+        });
+    }
+});
+// -------------------------------------------------------------------
+
+
+// --- POST /claim Route Handler (Original Logic) ---
 app.post('/claim', async (req, res) => {
     if (!DATABASE_URL) {
         return res.status(500).json({ success: false, message: 'Database connection failed: DATABASE_URL is not set.' });
