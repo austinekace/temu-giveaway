@@ -4,30 +4,31 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Temu - Amazing deals on everything</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <style>
-        /* Color Variables based on Screenshot Analysis */
+        /* Color Variables based on the Temu/Flash Sale aesthetic */
         :root {
             --dark: #222;
             --black: #000;
             --body-bg: #f5f5f5; /* Light gray body background for product grid area */
             --orange: #ff6a00; /* Primary accent for Temu Logo and Highlights */
-            --red-accent: #ff4500; /* Secondary accent color (similar to red/orange sale text) */
+            --red-accent: #ff4500; /* Secondary accent color (Sale text) */
             --green-bar: #009900; /* The prominent green bar color */
             --purple-bar: #800080; /* The prominent purple bar color */
             --product-bg: #fff;
+            --fee-color: var(--red-accent); 
         }
-        * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,Helvetica,sans-serif; }
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', Arial, Helvetica, sans-serif; }
         body { background:var(--body-bg); color:#111; line-height:1.5; }
         a { text-decoration:none; color:inherit; }
 
         /* General Layout */
         .container { max-width:1400px; margin:0 auto; padding:0 15px; }
 
-        /* TOP LAYERS - Header Complex Structure */
-
-        /* 1. Top Search/Icons Bar */
+        /* --- HEADER COMPLEX STRUCTURE --- */
         .header-top {
             background:var(--black);
             color:#fff;
@@ -39,9 +40,7 @@
             top:0;
             z-index:1000;
         }
-        .logo-section { display:flex; align-items:center; }
         .logo { font-size:32px; font-weight:bold; color:var(--orange); display:flex; align-items:center; gap:5px;}
-        
         .searchbar-main {
             flex:1;
             max-width:500px;
@@ -53,17 +52,8 @@
             gap:10px;
             margin:0 20px;
         }
-        .searchbar-main input {
-            background:transparent;
-            border:none;
-            outline:none;
-            color:#fff;
-            width:100%;
-            font-size:14px;
-        }
+        .searchbar-main input { background:transparent; border:none; outline:none; color:#fff; width:100%; font-size:14px; }
         .header-icons a { margin-left:15px; font-size:18px; color:#fff; }
-
-        /* 2. Trust/Delivery Bar */
         .header-delivery {
             background:var(--dark);
             color:#fff;
@@ -76,8 +66,6 @@
             border-bottom:1px solid #444;
         }
         .header-delivery span { display:flex; align-items:center; gap:5px; }
-
-        /* 3. Sale Bar (Green) */
         .sale-bar-green {
             background:var(--green-bar);
             color:#fff;
@@ -90,15 +78,7 @@
             align-items:center;
             gap: 20px;
         }
-        .sale-bar-green select {
-            background:var(--green-bar);
-            border:1px solid #fff;
-            color:#fff;
-            padding:4px 8px;
-            border-radius:5px;
-        }
-        
-        /* 4. Hero/Sale Banner (Purple) */
+        .sale-bar-green select { background:var(--green-bar); border:1px solid #fff; color:#fff; padding:4px 8px; border-radius:5px; }
         .hero-banner {
             background:var(--purple-bar);
             text-align:center;
@@ -108,8 +88,6 @@
             color:gold;
         }
         .hero-banner span { display:block; font-size:16px; margin-top:5px; color:#fff; }
-
-        /* 5. Trust Badges (White BG) */
         .trust-badges {
             background:#fff;
             padding:12px 20px;
@@ -123,8 +101,53 @@
         }
         .trust-badges i { color:var(--green-bar); margin-right:5px; }
 
+        /* --- CLAIM FORM SPECIFIC STYLES --- */
+        .prize-card {
+            border: 2px solid #e5e7eb;
+            transition: all 0.2s;
+            cursor: pointer;
+            border-radius: 0.75rem; /* Tailwind rounded-xl equivalent */
+        }
+        .prize-card.selected {
+            border-color: var(--orange);
+            box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.5);
+            background-color: #fff7ed;
+        }
+        .btn-select {
+            background-color: var(--orange);
+            transition: background-color 0.1s;
+        }
+        .btn-select:hover {
+            background-color: #e65c00;
+        }
+        .input-style {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #d1d5db;
+        }
+        .input-style:focus {
+            border-color: var(--orange);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.2);
+        }
+        /* Style the submit button */
+        #submit-button {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+        #submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        #submit-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: translateY(0);
+            box-shadow: none;
+        }
 
-        /* Product Grid (Main Content) */
+
+        /* --- PRODUCT GRID STYLES --- */
         .grid-section { background:var(--body-bg); padding:20px 0; }
         .grid {
             display:grid;
@@ -146,39 +169,14 @@
             object-fit:cover;
             border-bottom:1px solid #eee;
         }
-        .info {
-            padding:8px;
-            font-size:13px;
-        }
-        .price {
-            color:var(--red-accent);
-            font-weight:bold;
-            font-size:15px;
-        }
-        .old-price {
-            text-decoration:line-through;
-            color:#999;
-            font-size:11px;
-            margin-left:5px;
-        }
-        .sold {
-            font-size:11px;
-            color:var(--green-bar);
-            margin-top:2px;
-            font-weight:bold;
-        }
-        .badge {
-            background:var(--orange);
-            color:#fff;
-            padding:2px 5px;
-            border-radius:3px;
-            font-size:10px;
-            font-weight:bold;
-            display:inline-block;
-            margin-bottom:4px;
-        }
+        .info { padding:8px; font-size:13px; }
+        .price { color:var(--red-accent); font-weight:bold; font-size:15px; }
+        .old-price { text-decoration:line-through; color:#999; font-size:11px; margin-left:5px; }
+        .sold { font-size:11px; color:var(--green-bar); margin-top:2px; font-weight:bold; }
+        .badge { background:var(--orange); color:#fff; padding:2px 5px; border-radius:3px; font-size:10px; font-weight:bold; display:inline-block; margin-bottom:4px; }
 
-        /* Footer */
+
+        /* --- FOOTER STYLES --- */
         footer {
             background:var(--black);
             color:#fff;
@@ -202,11 +200,7 @@
         /* Mobile Responsiveness */
         @media (max-width: 768px) {
             .header-top { flex-wrap: wrap; }
-            .searchbar-main {
-                order: 3;
-                width: 100%;
-                margin: 10px 0 0 0;
-            }
+            .searchbar-main { order: 3; width: 100%; margin: 10px 0 0 0; }
             .header-icons { margin-top: 5px; }
             .header-delivery, .trust-badges { justify-content: space-around; gap: 10px; }
             .hero-banner { font-size: 20px; padding: 20px; }
@@ -222,7 +216,7 @@
         <div class="header-top">
             <div class="container flex justify-between items-center">
                 <div class="logo-section">
-                    <!-- SVG for Temu Logo Text -->
+                    <!-- Temu Logo SVG -->
                     <svg viewBox="0 0 100 30" width="80" height="24" class="logo">
                         <text x="0" y="24" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="900" fill="var(--orange)">temu</text>
                     </svg>
@@ -274,9 +268,103 @@
 
     </header>
 
-    <!-- PRODUCT GALLERY SECTION -->
+    <!-- CLAIM FORM CONTAINER -->
+    <div class="py-10">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl p-6 md:p-10 mx-auto" style="border: 2px solid var(--orange);">
+            <div class="text-center mb-6">
+                <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">
+                    Exclusive Prize Claim Portal
+                </h1>
+                <p class="mt-2 text-gray-500 text-lg">
+                    Select your favorite <span class="font-bold" style="color: var(--red-accent);">**2 valuable items**</span> to claim now.
+                </p>
+                <p class="mt-1 text-xs font-semibold" style="color: var(--purple-bar);">
+                    Submission sends data to PostgreSQL via Express server.
+                </p>
+            </div>
+
+            <!-- Global Message/Modal - Replaces Alert() -->
+            <div id="claim-message" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+                <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
+                    <div id="message-icon" class="text-4xl mb-4"></div>
+                    <p id="message-text" class="text-lg font-semibold mb-4"></p>
+                    <p id="tracking-text" class="text-sm text-gray-600 mb-4 hidden"></p>
+                    <button id="close-message" class="w-full py-2 rounded-lg text-white font-bold transition duration-150">
+                        Close
+                    </button>
+                </div>
+            </div>
+
+            <form id="claim-form">
+                
+                <!-- SECTION 1: CHOOSE YOUR PRIZES (MAX 2) -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-700 border-b pb-2">
+                        1. Choose Your Prize Items (<span id="selected-count">0</span>/2)
+                    </h2>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="prize-grid">
+                        <!-- Prize Cards will be injected here by JavaScript -->
+                    </div>
+                </section>
+
+                <!-- SECTION 2: CONTACT & DELIVERY DETAILS -->
+                <section class="mb-8">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-700 border-b pb-2">
+                        2. Contact & Delivery Details
+                    </h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" name="fullName" placeholder="Full Name (As per ID)" required class="input-style w-full focus:ring-2 focus:ring-orange-500 rounded-lg">
+                        <input type="email" name="email" placeholder="Email Address" required class="input-style w-full focus:ring-2 focus:ring-orange-500 rounded-lg">
+                        <input type="tel" name="phone" placeholder="Phone Number (e.g. +23480...)" required class="input-style w-full focus:ring-2 focus:ring-orange-500 rounded-lg">
+                        <input type="text" name="city" placeholder="City/Town" required class="input-style w-full focus:ring-2 focus:ring-orange-500 rounded-lg">
+                        <textarea name="fullAddress" placeholder="Full Delivery Address (Street, State, Country)" required rows="3" class="input-style w-full focus:ring-2 focus:ring-orange-500 md:col-span-2 rounded-lg"></textarea>
+                    </div>
+                </section>
+                
+                <!-- SECTION 3: FINAL CONFIRMATION & FEES -->
+                <section class="p-6 rounded-lg border-l-4" style="background-color: #fffde7; border-color: var(--orange);">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-700">
+                        3. Final Confirmation
+                    </h2>
+                    
+                    <p class="text-sm text-gray-600 italic mb-4">
+                        <i class="fas fa-exclamation-triangle mr-2" style="color: var(--orange);"></i>
+                        Logistics Fee covers mandatory handling and protection. Payable upon delivery.
+                    </p>
+
+                    <div class="flex justify-between items-center text-lg font-semibold mb-4 border-t pt-4">
+                        <span>Total Payable Logistics Fee (Estimated)</span>
+                        <span id="total-fee" class="text-3xl font-extrabold" style="color: var(--fee-color);">₦0</span>
+                    </div>
+
+                    <div class="flex items-center mb-6">
+                        <input type="checkbox" id="agreement" name="agreement" required class="h-4 w-4 border-gray-300 rounded focus:ring-2" style="color: var(--orange);">
+                        <label for="agreement" class="ml-2 text-sm text-gray-600">
+                            I confirm my details are correct and I agree to the terms & conditions, including the logistics fee.
+                        </label>
+                    </div>
+
+                    <button type="submit" id="submit-button" class="w-full py-4 rounded-xl text-white font-bold text-xl uppercase tracking-wider transition duration-150" 
+                        style="background-color: var(--orange);">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        Confirm Claim & Submit
+                    </button>
+                    
+                    <!-- Hidden inputs to send dynamic data to the server -->
+                    <input type="hidden" name="selectedPrizes" id="selected-prizes-input">
+                    <input type="hidden" name="totalFee" id="total-fee-input">
+                </section>
+                
+            </form>
+        </div>
+    </div>
+
+    <!-- PRODUCT GALLERY SECTION (The 100 Products Grid P1 to P100) -->
     <section class="grid-section">
         <div class="container">
+            <h2 class="text-2xl font-bold mb-4 text-gray-700 text-center">Featured Deals You Might Miss (P1 to P100)</h2>
             <div class="grid" id="product-grid">
                 <!-- Dynamic Products (P1 to P100) will be injected here by JavaScript -->
             </div>
@@ -285,7 +373,7 @@
 
     <!-- FOOTER -->
     <footer>
-        <div class="footer-grid">
+        <div class="footer-grid container">
             <div>
                 <h4>About Temu</h4>
                 <a href="#">Affiliate & Influencer Program</a>
@@ -311,7 +399,7 @@
             </div>
         </div>
 
-        <div class="payments">
+        <div class="payments container text-center">
             <img src="https://via.placeholder.com/60x25/333/fff?text=VISA" alt="Visa"/>
             <img src="https://via.placeholder.com/60x25/333/fff?text=MasterCard" alt="MasterCard"/>
             <img src="https://via.placeholder.com/60x25/333/fff?text=PayPal" alt="PayPal"/>
@@ -319,63 +407,244 @@
             <img src="https://via.placeholder.com/60x25/333/fff?text=Amex" alt="Amex"/>
         </div>
 
-        <div class="copyright">
-            © 2022 - 2025 Whaleco Inc. | Terms of use | Privacy policy | Your privacy choices
+        <div class="copyright container">
+            &copy; 2022 - 2025 Whaleco Inc. | Terms of use | Privacy policy | Your privacy choices
         </div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const MAX_PRIZES = 2;
+            let selectedPrizes = [];
+            
+            // Define the prizes for the claim form (Value and Fee in Naira)
+            const claimPrizes = [
+                { id: 'item1', name: 'Smart Home Security System', category: 'Electronics', value: 350000, fee: 10000 },
+                { id: 'item2', name: 'Kindle Oasis (Latest Gen)', category: 'Electronics', value: 150000, fee: 5000 },
+                { id: 'item3', name: 'HP Spectre x360', category: 'Electronics', value: 590000, fee: 15000 },
+                { id: 'item4', name: 'FPV Racing Drone Kit', category: 'Hobby', value: 450000, fee: 10000 },
+                { id: 'item5', name: 'Rolex Submariner Watch (Replica)', category: 'Luxury', value: 190000, fee: 15000 },
+                { id: 'item6', name: 'Gucci Dionysus Bag (Replica)', category: 'Luxury', value: 200000, fee: 10000 },
+                { id: 'item7', name: 'Bose Noise Cancelling Headphones', category: 'Audio', value: 120000, fee: 7000 },
+                { id: 'item8', name: 'Apple Watch Series 9', category: 'Wearables', value: 180000, fee: 6000 },
+            ];
+            
+            // --- DOM Elements for Claim Form ---
+            const claimGrid = document.getElementById('prize-grid');
+            const selectedCountDisplay = document.getElementById('selected-count');
+            const totalFeeDisplay = document.getElementById('total-fee');
+            const selectedPrizesInput = document.getElementById('selected-prizes-input');
+            const totalFeeInput = document.getElementById('total-fee-input');
+            const claimForm = document.getElementById('claim-form');
+            const submitButton = document.getElementById('submit-button');
+
+            // Modal elements
+            const messageModal = document.getElementById('claim-message');
+            const messageIcon = document.getElementById('message-icon');
+            const messageText = document.getElementById('message-text');
+            const trackingText = document.getElementById('tracking-text');
+            const closeMessageButton = document.getElementById('close-message');
+
+
+            // --- Helper Functions ---
+
+            // Formats number to Nigerian Naira (₦) with commas
+            const formatCurrency = (amount) => `₦${amount.toLocaleString('en-US')}`;
+
+            // Recalculates and updates the total fee displayed and the hidden input fields
+            const updateSummary = () => {
+                const totalFee = selectedPrizes.reduce((sum, id) => {
+                    const prize = claimPrizes.find(p => p.id === id);
+                    return sum + (prize ? prize.fee : 0);
+                }, 0);
+
+                selectedCountDisplay.textContent = selectedPrizes.length;
+                totalFeeDisplay.textContent = formatCurrency(totalFee);
+                selectedPrizesInput.value = JSON.stringify(selectedPrizes.map(id => {
+                    const prize = claimPrizes.find(p => p.id === id);
+                    return { id: prize.id, name: prize.name, fee: prize.fee };
+                }));
+                totalFeeInput.value = totalFee;
+            };
+
+            // Toggles prize selection and updates the UI/summary
+            const toggleSelection = (cardElement, prizeId) => {
+                const isSelected = selectedPrizes.includes(prizeId);
+
+                if (isSelected) {
+                    selectedPrizes = selectedPrizes.filter(id => id !== prizeId);
+                    cardElement.classList.remove('selected');
+                    cardElement.querySelector('.btn-select').textContent = 'Select Item';
+                } else if (selectedPrizes.length < MAX_PRIZES) {
+                    selectedPrizes.push(prizeId);
+                    cardElement.classList.add('selected');
+                    cardElement.querySelector('.btn-select').textContent = 'Selected (Click to Remove)';
+                } else {
+                    showMessage('Failure', `You can only select a maximum of ${MAX_PRIZES} prizes.`, 'red');
+                    return;
+                }
+                updateSummary();
+            };
+
+            // Renders the prize selection cards dynamically
+            const renderClaimPrizes = () => {
+                claimPrizes.forEach((prize) => {
+                    const card = document.createElement('div');
+                    card.className = `prize-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 rounded-lg`;
+                    card.setAttribute('data-prize-id', prize.id);
+                    
+                    const isSelected = selectedPrizes.includes(prize.id);
+                    
+                    card.innerHTML = `
+                        <div class="relative h-20 bg-gray-100 flex items-center justify-center p-2 rounded-t-lg" style="background-color: var(--purple-bar);">
+                            <div class="text-2xl text-white font-bold tracking-tight text-center">
+                                ${prize.name.split(' ').slice(0, 2).join(' ')}...
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <h3 class="font-bold text-gray-800 mb-1 text-sm">${prize.name}</h3>
+                            <p class="text-xs text-gray-500">Value: ${formatCurrency(prize.value)}</p>
+                            <div class="text-sm font-semibold mt-2">
+                                Fee: <span style="color: var(--fee-color);">${formatCurrency(prize.fee)}</span>
+                            </div>
+                            <button type="button" class="btn-select mt-3 w-full py-2 rounded-lg text-white font-bold text-xs ${isSelected ? 'selected' : ''}">
+                                ${isSelected ? 'Selected' : 'Select Item'}
+                            </button>
+                        </div>
+                    `;
+
+                    card.querySelector('.btn-select').addEventListener('click', () => {
+                        toggleSelection(card, prize.id);
+                    });
+
+                    claimGrid.appendChild(card);
+                });
+            };
+
+            // Handles showing success/failure modal (Custom replacement for alert())
+            const showMessage = (status, text, color, trackingId = null) => {
+                messageModal.classList.remove('hidden');
+                
+                if (status === 'Success') {
+                    messageIcon.innerHTML = '<i class="far fa-check-circle text-green-500"></i>';
+                    closeMessageButton.style.backgroundColor = 'var(--green-bar)';
+                    trackingText.textContent = `Tracking ID: ${trackingId}`;
+                    trackingText.classList.remove('hidden');
+                    // Reset selected state visually and logically on successful claim
+                    selectedPrizes = [];
+                    renderClaimPrizes(); // Re-render to clear selection styles
+                    updateSummary();
+                    claimForm.reset(); // Clear form inputs
+                } else {
+                    messageIcon.innerHTML = '<i class="far fa-times-circle text-red-500"></i>';
+                    closeMessageButton.style.backgroundColor = 'var(--fee-color)';
+                    trackingText.classList.add('hidden');
+                }
+                messageText.textContent = text;
+            };
+
+            // --- Form Submission Logic (Connects to server.js) ---
+            
+            claimForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                if (selectedPrizes.length === 0) {
+                    showMessage('Failure', 'Please select at least one prize item.', 'red');
+                    return;
+                }
+                
+                if (!document.getElementById('agreement').checked) {
+                    showMessage('Failure', 'You must agree to the terms and conditions.', 'red');
+                    return;
+                }
+
+                // Collect data from form fields
+                const formData = new FormData(claimForm);
+                const data = Object.fromEntries(formData.entries());
+                
+                // Overwrite prizes and fee with data from JS state (which are prepared for PostgreSQL)
+                data.selectedPrizes = JSON.parse(selectedPrizesInput.value);
+                data.totalFee = parseInt(totalFeeInput.value, 10);
+
+                // Disable button and show loading state
+                submitButton.disabled = true;
+                submitButton.textContent = 'Submitting... Please Wait.';
+
+                try {
+                    const response = await fetch('/claim', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok && result.success) {
+                        showMessage('Success', result.message, 'green', result.trackingId);
+                    } else {
+                        // Handle server-side errors or bad requests
+                        showMessage('Failure', result.message || `Claim failed: Server status ${response.status}.`, 'red');
+                    }
+
+                } catch (error) {
+                    console.error('Network or Fetch Error:', error);
+                    showMessage('Failure', 'Claim Failed: Could not connect to the server. Is server.js running?', 'red');
+                } finally {
+                    // Re-enable button after response
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Confirm Claim & Submit';
+                }
+            });
+            
+            // Close modal functionality
+            closeMessageButton.addEventListener('click', () => {
+                messageModal.classList.add('hidden');
+            });
+
+
+            // --- Storefront Product Grid Generation (P1 to P100) ---
             const gridContainer = document.getElementById('product-grid');
             const totalProducts = 100;
 
-            // Utility function to format prices
-            const formatPrice = (amount) => {
-                // Formatting to a common currency style with commas for readability
-                return `₦${Math.round(amount).toLocaleString('en-US')}`;
-            };
+            const generateProducts = () => {
+                for (let i = 1; i <= totalProducts; i++) {
+                    // Dynamic Data Generation for the mock storefront
+                    const basePrice = Math.floor(Math.random() * 500 + 50) * 1000;
+                    const discountPercentage = Math.floor(Math.random() * 80 + 10);
+                    const currentPrice = Math.floor(basePrice * (1 - discountPercentage / 100) / 1000) * 1000;
+                    const productsSold = Math.floor(Math.random() * 30 + 5) * 1000;
+                    const title = (i % 5 === 0) ? `Smart Gadget ${i} (Trending)` : `Daily Essential ${i}`;
 
-            for (let i = 1; i <= totalProducts; i++) {
-                // Dynamic Data Generation
-                const basePrice = Math.floor(Math.random() * 500 + 50) * 1000;
-                const discountPercentage = Math.floor(Math.random() * 80 + 10);
-                const currentPrice = basePrice * (1 - discountPercentage / 100);
-                const productsSold = Math.floor(Math.random() * 30 + 5) * 1000;
+                    const productDiv = document.createElement('div');
+                    productDiv.className = 'product';
 
-                const productDiv = document.createElement('div');
-                productDiv.className = 'product';
-
-                // Generate the placeholder image URL with the sequential name (P1, P2, etc.)
-                const placeholderName = `P${i}`;
-                // Use a dark background and orange text for the placeholders to stand out
-                const imageUrl = `https://via.placeholder.com/300x300/333/ff9900?text=${placeholderName}`;
-                
-                let title;
-                if (i % 5 === 0) {
-                    title = `Smart Gadget ${i} (New Arrival)`;
-                } else if (i % 3 === 0) {
-                    title = `Luxury Accessory ${i}`;
-                } else {
-                    title = `Everyday Essential ${i}`;
-                }
-
-                productDiv.innerHTML = `
-                    <img src="${imageUrl}" alt="${title}"/>
-                    <div class="info">
-                        <div class="badge">-${discountPercentage}%</div>
-                        <div class="title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color:#333;">${title}</div>
-                        <div class="flex items-center mt-1">
-                            <span class="price">${formatPrice(currentPrice)}</span>
-                            <span class="old-price">${formatPrice(basePrice)}</span>
+                    // Placeholder image for P1 to P100
+                    const placeholderName = `P${i}`;
+                    const imageUrl = `https://placehold.co/300x300/333/ff9900?text=${placeholderName}`;
+                    
+                    productDiv.innerHTML = `
+                        <img src="${imageUrl}" alt="${title}" onerror="this.onerror=null; this.src='https://placehold.co/300x300/e0e0e0/555?text=No+Image'"/>
+                        <div class="info">
+                            <div class="badge">-${discountPercentage}%</div>
+                            <div class="title text-sm font-medium" style="height: 36px; overflow: hidden; color:#333;">${title}</div>
+                            <div class="flex items-center mt-1">
+                                <span class="price">${formatCurrency(currentPrice)}</span>
+                                <span class="old-price">${formatCurrency(basePrice)}</span>
+                            </div>
+                            <div class="sold">${productsSold.toLocaleString()} sold</div>
                         </div>
-                        <div class="sold">${productsSold.toLocaleString()} sold</div>
-                    </div>
-                `;
+                    `;
 
-                gridContainer.appendChild(productDiv);
+                    gridContainer.appendChild(productDiv);
+                }
             }
             
-            console.log(`Successfully generated ${totalProducts} dynamic product cards.`);
+            // Initial setup for the Claim Form and Product Grid
+            renderClaimPrizes();
+            generateProducts();
+            updateSummary();
         });
     </script>
 
