@@ -3,8 +3,7 @@ const path = require('path');
 const { Pool } = require('pg');
 
 const app = express();
-// USE process.env.PORT (or a default like 3000) instead of the hardcoded 10000.
-// Cloud services like Render automatically inject the correct port into this variable.
+// Using process.env.PORT (or a default like 3000) is best practice for cloud hosting.
 const PORT = process.env.PORT || 3000; 
 
 // Middleware to parse JSON bodies
@@ -13,38 +12,37 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
 // --- PostgreSQL Database Setup ---
-// IMPORTANT: The connection string must be provided via the DATABASE_URL environment variable.
-const DATABASE_URL = process.env.DATABASE_URL; // We rely solely on the environment variable here.
+const DATABASE_URL = process.env.DATABASE_URL;
 
 if (!DATABASE_URL) {
     console.error("FATAL ERROR: DATABASE_URL environment variable is not set. Database connection will fail.");
-    // If running locally without a DB, use a safe fallback connection string to allow server startup.
-    // If running in cloud, this is critical.
 }
 
 const pool = new Pool({
     connectionString: DATABASE_URL,
     
-    // --- CRITICAL FIX FOR CLOUD HOSTING (e.g., Render) ---
-    // Cloud database connections (especially PostgreSQL) require SSL to be enabled.
-    // We set up SSL configuration only if the DATABASE_URL is present.
+    // CRITICAL FIX: Enable SSL for cloud-hosted databases (like Render)
     ssl: DATABASE_URL ? {
-        rejectUnauthorized: false // Required for some hosted services like Render
+        rejectUnauthorized: false // Required for some hosted services
     } : false
-    // ------------------------------------------------------
 });
 
-// Function to ensure the 'claims' table exists before the server starts handling requests
+// Function to reset and ensure the 'claims' table exists
 const setupDatabase = async () => {
-    // Only attempt setup if the DATABASE_URL is actually present
     if (!DATABASE_URL) {
         console.log("Skipping database setup as DATABASE_URL is missing.");
         return;
     }
     try {
         const client = await pool.connect();
+        
+        // 1. DROP the table if it exists to fix the "column does not exist" error
+        await client.query(`DROP TABLE IF EXISTS claims;`);
+        console.log("PostgreSQL: Existing 'claims' table dropped successfully (to fix schema mismatch).");
+
+        // 2. Recreate the table with the guaranteed correct schema (using snake_case)
         await client.query(`
-            CREATE TABLE IF NOT EXISTS claims (
+            CREATE TABLE claims (
                 id SERIAL PRIMARY KEY,
                 full_name VARCHAR(255) NOT NULL,
                 email VARCHAR(255) NOT NULL,
@@ -57,9 +55,9 @@ const setupDatabase = async () => {
             );
         `);
         client.release();
-        console.log("PostgreSQL: 'claims' table checked/created successfully.");
+        console.log("PostgreSQL: 'claims' table successfully reset and created with correct schema.");
     } catch (err) {
-        console.error("PostgreSQL Error: Failed to set up database. Ensure DATABASE_URL is correct and SSL is handled.", err.stack);
+        console.error("PostgreSQL Error: Failed to set up database.", err.stack);
     }
 };
 
