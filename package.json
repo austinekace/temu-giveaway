@@ -1,13 +1,13 @@
 {
   "name": "temu-full-stack-claim-service",
   "version": "1.0.0",
-  "description": "TEMU-styled claim form with Express and PostgreSQL persistence.",
+  "description": "Backend server for TEMU giveaway claim processing.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.19.2",
-    "pg": "^8.11.3"
+    "pg": "^8.11.5"
   }
 }
