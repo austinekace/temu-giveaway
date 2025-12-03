@@ -27,7 +27,7 @@ const pool = new Pool({
     } : false
 });
 
-// Function to reset and ensure the 'claims' table exists
+// Function to ensure the 'claims' table exists without destroying data
 const setupDatabase = async () => {
     if (!DATABASE_URL) {
         console.log("Skipping database setup as DATABASE_URL is missing.");
@@ -36,14 +36,9 @@ const setupDatabase = async () => {
     try {
         const client = await pool.connect();
         
-        // 1. DROP the table if it exists to fix the "column does not exist" error
-        // NOTE: We keep this DROP/CREATE cycle until we confirm the schema is stable.
-        await client.query(`DROP TABLE IF EXISTS claims;`);
-        console.log("PostgreSQL: Existing 'claims' table dropped successfully (to fix schema mismatch).");
-
-        // 2. Recreate the table with the guaranteed correct schema (using snake_case)
+        // IMPORTANT: We use CREATE TABLE IF NOT EXISTS to prevent data loss on redeployment.
         await client.query(`
-            CREATE TABLE claims (
+            CREATE TABLE IF NOT EXISTS claims (
                 id SERIAL PRIMARY KEY,
                 full_name VARCHAR(255) NOT NULL,
                 email VARCHAR(255) NOT NULL,
@@ -56,7 +51,7 @@ const setupDatabase = async () => {
             );
         `);
         client.release();
-        console.log("PostgreSQL: 'claims' table successfully reset and created with correct schema.");
+        console.log("PostgreSQL: 'claims' table structure verified. Data is persistent.");
     } catch (err) {
         console.error("PostgreSQL Error: Failed to set up database.", err.stack);
     }
@@ -67,7 +62,7 @@ setupDatabase();
 
 
 // --- TEMPORARY GET ROUTE FOR DATA VERIFICATION (View all claims) ---
-// We will use this route to confirm that data is readable from the database.
+// This endpoint performs a simple SELECT * query and returns the results as JSON.
 app.get('/view-claims', async (req, res) => {
     if (!DATABASE_URL) {
         return res.status(500).json({ success: false, message: 'Database connection failed: DATABASE_URL is not set.' });
@@ -75,10 +70,11 @@ app.get('/view-claims', async (req, res) => {
     
     try {
         const client = await pool.connect();
+        // Retrieve all columns and order by the newest claim date
         const result = await client.query('SELECT * FROM claims ORDER BY claim_date DESC;');
         client.release();
 
-        // Display the retrieved data as raw JSON on the page
+        // Send the database rows back as raw JSON text
         res.json(result.rows);
 
     } catch (err) {
@@ -93,7 +89,7 @@ app.get('/view-claims', async (req, res) => {
 // -------------------------------------------------------------------
 
 
-// --- POST /claim Route Handler (Original Logic) ---
+// --- POST /claim Route Handler (Original Data Insertion Logic) ---
 app.post('/claim', async (req, res) => {
     if (!DATABASE_URL) {
         return res.status(500).json({ success: false, message: 'Database connection failed: DATABASE_URL is not set.' });
@@ -139,7 +135,6 @@ app.post('/claim', async (req, res) => {
 
     } catch (err) {
         console.error("Database Insert Error:", err.stack);
-        // Return a clear 500 status on database failure
         res.status(500).json({ 
             success: false, 
             message: 'Claim failed due to a database error. Check server logs for details.',
